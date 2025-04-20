@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 ignored
+src/api-key.ts
 
 # Editor directories and files
 .vscode/*
