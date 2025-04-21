@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import logo from './assets/Logo.png'
-import './App.css'
-import { API_KEY } from './api-key'
+import './Home.css'
+import { API_KEY } from '../api-key'
 
-export default function App() {
+export default function Home() {
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -31,21 +30,6 @@ export default function App() {
   }
   return (
       <>
-      <div className="headbar">
-        <div className="logobox">
-          <a href="#">
-            <img src={logo} className="logo" alt="MovieRouterLogo" />
-          </a>
-          <h1 className="caveat">Movie Router</h1>
-        </div>
-        <div className="navbar">
-          <a href="#home">Home</a>
-          <a href="#genres">Genres</a>
-          <a href="#theatres">Theatres</a>
-          <a href="#rec">Recommended</a>
-        </div>
-        <input type="text" placeholder="Search.."/>
-      </div>
       <h1>Welcome to MovieRouter.com</h1>
       <div className="card">
         <button onClick={() => getUserLocation()}>Click to get your location</button>
