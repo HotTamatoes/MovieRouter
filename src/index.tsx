@@ -14,6 +14,8 @@ import Home from "./pages/Home";
 import Genres from './pages/Genres';
 import Theatres from './pages/Theatres';
 import Recommended from './pages/Recommended';
+import Search from './pages/Search';
+import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +25,8 @@ const router = createBrowserRouter(
         <Route path="Genres" element={<Genres />} />
         <Route path="Theatres" element={<Theatres />} />
         <Route path="Recommended" element={<Recommended />} />
+        <Route path="Search/:query" element={<Search />} />
+        <Route path="*" element={<ErrorPage />} />
       </Route>
     </>
   )

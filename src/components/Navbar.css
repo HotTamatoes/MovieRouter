@@ -50,10 +50,19 @@
     background-color: #ddd;
 }
 
-.headbar input[type=text] {
+.headbar form {
     float: bottom-right;
+    display: flex;
     margin-left: auto;
     margin-top: auto;
+}
+
+.headbar form i {
+    float: bottom-right;
+    margin-top: auto;
+}
+
+.headbar form input[type=text] {
     padding: 0.6em 1.2em;
     border: none;
     font-size: 1em;
