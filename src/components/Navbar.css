@@ -68,3 +68,19 @@
     font-size: 1em;
     height: 1.5em;
 }
+
+@media (prefers-color-scheme: light) {
+  .headbar {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
+@media screen and (max-width: 55em) {
+    .headbar {   
+      flex-direction: column;
+    }
+    .headbar input[type=text] {
+      border: 1px solid #696969;  
+    }
+  }
