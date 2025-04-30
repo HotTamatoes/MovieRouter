@@ -1,0 +1,86 @@
+.caveat {
+    font-family: "Caveat", cursive;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    padding-right: 0.5em;
+}
+
+.headbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    background-color: #141414;
+}
+
+.logobox {
+    display: flex;
+}
+
+.logo {
+    height: 4em;
+    padding: 1em;
+    will-change: filter;
+    transition: filter 300ms;
+}
+.logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.navbar {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    margin-top: auto;
+    bottom: 0;
+}
+
+.navbar a {
+    background-color: #444444;
+    float: left;
+    font-size: 1em;
+    color: white;
+    text-align: center;
+    padding: 0.6em 1.2em;
+    text-decoration: none;
+}
+.navbar a:hover {
+    background-color: #ddd;
+}
+
+.headbar form {
+    float: bottom-right;
+    display: flex;
+    margin-left: auto;
+    margin-top: auto;
+}
+
+.headbar form i {
+    float: bottom-right;
+    margin-top: auto;
+}
+
+.headbar form input[type=text] {
+    padding: 0.6em 1.2em;
+    border: none;
+    font-size: 1em;
+    height: 1.5em;
+}
+
+@media (prefers-color-scheme: light) {
+    .headbar {
+        color: #213547;
+        background-color: #ffffff;
+    }
+}
+
+@media screen and (max-width: 55em) {
+    .headbar {   
+        flex-direction: column;
+    }
+    .headbar input[type=text] {
+        border: 1px solid #696969;  
+    }
+}
