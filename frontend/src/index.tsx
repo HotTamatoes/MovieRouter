@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 
 import Home from "./pages/Home";
 import Genres from './pages/Genres';
-import Theaters, { theaterLoader } from './pages/Theaters';
+import Theaters from './pages/Theaters';
 import Recommended from './pages/Recommended';
 import Search from './pages/Search';
 import ErrorPage from './pages/ErrorPage';
@@ -24,7 +24,7 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="Genres" element={<Genres />} />
         <Route path="Recommended" element={<Recommended />} />
-        <Route path="Theaters" element={<Theaters />} loader={theaterLoader} />
+        <Route path="Theaters" element={<Theaters />} />
         <Route path="Search/:query" element={<Search />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>

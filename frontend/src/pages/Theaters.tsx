@@ -1,8 +1,5 @@
-import { API_KEY } from "../api-key"
-import { useLoaderData } from "react-router-dom"
-import { useState } from "react"
-import g from '../assets/g.json'
-
+import rawAPIKey from "../../../api-key.txt"
+import { useEffect, useState } from "react"
 
 interface Theater {
     name: string
@@ -11,39 +8,59 @@ interface Theater {
     rating_count: string
 }
 
-export async function theaterLoader(): Promise<Theater[]> {
-    let out: Theater[] = []
-    for (const theater of g.results) {
-        out.push({
-            name: theater.name,
-            address: theater.address.city,
-            rating: '' + theater.id,
-            rating_count: '' + theater.website
-        })
-    }
-    return out
-}
-
-/*
-export async function theaterLoader() {
-    const webRequest = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key='+API_KEY+'&location=39.9705652,-105.2012432&radius=25000&type=movie_theater'
-    return fetch(webRequest).then(res => res.json()).catch(err => err.message + '\n' + webRequest)
-}
-*/
-
-export default function Theaters() {
+export default function test() {
+    const [APIKey, setAPIKey] = useState('')
     const [theaterCount, setTheaterCount] = useState('Max')
-    const theaters = useLoaderData()
+    const [theaters, setTheaters] = useState<Theater[]>([])
+    const [refresh, setRefresh] = useState(false)
+    
+    useEffect(() => {
+        let ignore = false
+        const getAPI = async () => {
+            const result = await fetch(rawAPIKey)
+            if (!ignore) {
+                const text = await result.text()
+                setAPIKey(text);
+            }
+        }
+        getAPI()
+        return () => {
+            ignore = true;
+        };
+    }, [])
+
+    
+
+    useEffect(() => {
+        const getData = async () => {
+            const res = await fetch("http://localhost:8080/api/theaterlist?location=39.97929,-105.25091")
+            const resJson = await res.json()
+            let out: Theater[] = []
+            for (const theater of resJson.results) {
+                out.push({
+                    name: theater.name,
+                    address: theater.vicinity,
+                    rating: '' + theater.rating,
+                    rating_count: '' + theater.user_ratings_total
+                })
+            }
+            setTheaters(out)
+        }
+        getData()
+        return
+    }, [refresh])
+
     let theaterData: Theater[] = []
 
     if (theaterCount === 'Max') {
         theaterData = theaters
     } else {
-        theaterData = theaters.slice(0, theaterCount)
+        theaterData = theaters.slice(0, Number(theaterCount))
     }
 
     return (
     <>
+        <button onClick={() => setRefresh(!refresh)}>Reload</button>
         <p >Number of Theaters: </p>
         <select id='theater-count' value={theaterCount} onChange={(e) => setTheaterCount(e.target.value)}>
             <option value='1'>1</option>
