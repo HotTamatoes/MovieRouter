@@ -8,11 +8,16 @@ interface Theater {
     rating_count: string
 }
 
-export default function test() {
+export default function Theaters() {
     const [APIKey, setAPIKey] = useState('')
     const [theaterCount, setTheaterCount] = useState('Max')
     const [theaters, setTheaters] = useState<Theater[]>([])
     const [refresh, setRefresh] = useState(false)
+    const [userLocation, setUserLocation] = useState({
+        lat: 100,
+        long: 200,
+        error: ""
+    })
     
     useEffect(() => {
         let ignore = false
@@ -29,11 +34,41 @@ export default function test() {
         };
     }, [])
 
-    
+    useEffect(() => {
+        function getLocation() {
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+            setUserLocation({
+                lat: 100,
+                long: 200,
+                error: "Geolocation is not supported by this browser."
+            })
+            }
+        }
+        getLocation()
+        return
+    }, [refresh])
+
+    function success(position: GeolocationPosition) {
+        const {latitude, longitude} = position.coords;
+        setUserLocation({
+        lat: latitude,
+        long: longitude,
+        error: ""
+        })
+    }
+    function error() {
+        setUserLocation({
+        lat: 100,
+        long: 200,
+        error: "Unable to retrieve your location"
+        })
+    }
 
     useEffect(() => {
         const getData = async () => {
-            const res = await fetch("http://localhost:8080/api/theaterlist?location=39.97929,-105.25091")
+            const res = await fetch(`http://localhost:8080/api/theaterlist?location=${userLocation.lat},${userLocation.long}`)
             const resJson = await res.json()
             let out: Theater[] = []
             for (const theater of resJson.results) {
@@ -48,7 +83,7 @@ export default function test() {
         }
         getData()
         return
-    }, [refresh])
+    }, [userLocation])
 
     let theaterData: Theater[] = []
 
@@ -61,18 +96,23 @@ export default function test() {
     return (
     <>
         <button onClick={() => setRefresh(!refresh)}>Reload</button>
-        <p >Number of Theaters: </p>
-        <select id='theater-count' value={theaterCount} onChange={(e) => setTheaterCount(e.target.value)}>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-            <option value='5'>5</option>
-            <option value='Max'>Max</option>
-        </select>
-        <ul>
-            {theaterData.map((theater: Theater, index: number) => (<li key={index}>{theater.name}, {theater.address}, {theater.rating}, {theater.rating_count}</li>))}
-        </ul>
+        {userLocation.lat != 100 &&
+        <div>
+            <p >Number of Theaters: </p>
+            <select id='theater-count' value={theaterCount} onChange={(e) => setTheaterCount(e.target.value)}>
+                <option value='1'>1</option>
+                <option value='2'>2</option>
+                <option value='3'>3</option>
+                <option value='4'>4</option>
+                <option value='5'>5</option>
+                <option value='Max'>Max</option>
+            </select>
+            <ul>
+                {theaterData.map((theater: Theater, index: number) => (<li key={index}>{theater.name}, {theater.address}, {theater.rating}, {theater.rating_count}</li>))}
+            </ul>
+        </div>
+        }
+        {userLocation.error != '' && <p>Error: {userLocation.error}</p>}
     </>
     )
 }
