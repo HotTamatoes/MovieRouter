@@ -1,4 +1,5 @@
 import rawAPIKey from "../../../api-key.txt"
+import './Theaters.css'
 import { useEffect, useState } from "react"
 
 interface Theater {
@@ -12,7 +13,6 @@ export default function Theaters() {
     const [APIKey, setAPIKey] = useState('')
     const [theaterCount, setTheaterCount] = useState('Max')
     const [theaters, setTheaters] = useState<Theater[]>([])
-    const [refresh, setRefresh] = useState(false)
     const [userLocation, setUserLocation] = useState({
         lat: 100,
         long: 200,
@@ -48,7 +48,7 @@ export default function Theaters() {
         }
         getLocation()
         return
-    }, [refresh])
+    }, [])
 
     function success(position: GeolocationPosition) {
         const {latitude, longitude} = position.coords;
@@ -95,24 +95,39 @@ export default function Theaters() {
 
     return (
     <>
-        <button onClick={() => setRefresh(!refresh)}>Reload</button>
-        {userLocation.lat != 100 &&
-        <div>
-            <p >Number of Theaters: </p>
-            <select id='theater-count' value={theaterCount} onChange={(e) => setTheaterCount(e.target.value)}>
-                <option value='1'>1</option>
-                <option value='2'>2</option>
-                <option value='3'>3</option>
-                <option value='4'>4</option>
-                <option value='5'>5</option>
-                <option value='Max'>Max</option>
-            </select>
-            <ul>
-                {theaterData.map((theater: Theater, index: number) => (<li key={index}>{theater.name}, {theater.address}, {theater.rating}, {theater.rating_count}</li>))}
-            </ul>
+        <div className="theaterPage">
+            <iframe
+                className="google_map"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://www.google.com/maps/embed/v1/place?key=${APIKey}&q=${userLocation.lat},${userLocation.long}`}
+            >
+            </iframe>
+            <div className="listing">
+                {userLocation.lat != 100 &&
+                    <div>
+                        <div className="results">
+                            <p >Number of Theaters:</p>
+                            <select id='theater-count' value={theaterCount} onChange={(e) => setTheaterCount(e.target.value)}>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='Max'>Max</option>
+                            </select>
+                        </div>
+                        <ul className="theaterList" >
+                            {theaterData.map((theater: Theater, index: number) => (
+                                <li key={index}>
+                                    <div className="box">{theater.name}, {theater.address}, {theater.rating}, {theater.rating_count}</div>
+                                </li>
+                                ))}
+                        </ul>
+                    </div>
+                }
+                {userLocation.error != '' && <p>Error: {userLocation.error}</p>}
+            </div>
         </div>
-        }
-        {userLocation.error != '' && <p>Error: {userLocation.error}</p>}
     </>
     )
 }
