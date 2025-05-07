@@ -13,7 +13,7 @@ var port = ":8080"
 var API_KEY string
 
 func main() {
-	byteAPIKey, err := os.ReadFile("../api-key.txt")
+	byteAPIKey, err := os.ReadFile("../google-maps-api-key.txt")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -5,7 +5,9 @@ Before you can run this project locally, you will need a google maps api key. In
 Go to the Google Maps Platform > Credentials page.
 On the Credentials page, click Create credentials > API key.
 
-Store this api-key in the root folder of the project (./) in a text file named api-key.txt
+Store this api-key in the root folder of the project (./) in a text file named google-maps-api-key.txt
+
+You will also need a free OMDb API key, from http://www.omdbapi.com/. store this in omdb-api-key.txt
 
 
 ##Server

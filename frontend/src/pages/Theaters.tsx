@@ -1,4 +1,4 @@
-import rawAPIKey from "../../../api-key.txt"
+import rawAPIKey from "../../../google-maps-api-key.txt"
 import './Theaters.css'
 import { useEffect, useState } from "react"
 import LoadingSpinner from "../components/LoadingSpinner"
