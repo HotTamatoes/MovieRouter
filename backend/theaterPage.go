@@ -40,7 +40,7 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 
 	var url []string = []string{
 		"https://maps.googleapis.com/maps/api/place/nearbysearch/json",
-		"?key=" + API_KEY,
+		"?key=" + GOOGLE_API_KEY,
 		"&location=" + location,
 		"&radius=25000",
 		"&type=movie_theater"}
@@ -60,7 +60,7 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Web has been requested")
+	fmt.Println("Web has been requested for nearby" + location)
 
 	err2 := json.NewDecoder(resp.Body).Decode(&theaters)
 	if err2 != nil {

@@ -10,20 +10,28 @@ import (
 )
 
 var port = ":8080"
-var API_KEY string
+var GOOGLE_API_KEY string
+var OMDB_API_KEY string
 
 func main() {
-	byteAPIKey, err := os.ReadFile("../google-maps-api-key.txt")
+	byteGAPIKey, err := os.ReadFile("../google-maps-api-key.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
-	API_KEY = string(byteAPIKey)
+	GOOGLE_API_KEY = string(byteGAPIKey)
+
+	byteOAPIKey, err := os.ReadFile("../omdb-api-key.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	OMDB_API_KEY = string(byteOAPIKey)
 
 	router := mux.NewRouter()
 	router.HandleFunc("/api/theaterlist", getTheaterList).Methods("GET")
 	router.HandleFunc("/api/movieinfo", getMovieInfo).Methods("GET")
 	router.HandleFunc("/api/test", test).Methods("GET")
 	router.HandleFunc("/api/testjson", testJson).Methods("GET")
+	router.HandleFunc("/api/omdb", omdbSingle).Methods("GET")
 
 	fmt.Println("http://localhost" + port)
 

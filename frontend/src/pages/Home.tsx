@@ -1,78 +1,73 @@
 import { useEffect, useState } from 'react'
 import './Home.css'
-import rawAPIKey from '../../../api-key.txt'
+import LoadingSpinner from '../components/LoadingSpinner'
 
+const movieList: string[] = ['thunderbolts&y=2025', 'sinners&y=2025', 'a+minecraft+movie', 'the+accountant+2', 'shadow+force&y=2025',
+  'fight+or+flight', 'clown+in+a+cornfield', 'until+dawn', 'juliet+&+romeo', 'the+king+of+kings', 'the+amateur', 'warfare']
+  const singleMovieList: string[] = ['a+minecraft+movie']
+
+interface Movie {
+  title:    string
+	year:     string
+	rated:    string
+	released: string
+	genre:    string
+	director: string
+	poster:   string
+}
 export default function Home() {
-  const [APIKey, setAPIKey] = useState('')
-  const [userLocation, setUserLocation] = useState({
-    lat: 100,
-    long: 200,
-    error: ""
-  })
-    
+  const [loading, setLoading] = useState(true)
+  const [movies, setMovies] = useState<Movie[]>([])
+
   useEffect(() => {
-      let ignore = false
-      const getAPI = async () => {
-          const result = await fetch(rawAPIKey)
-          if (!ignore) {
-              const text = await result.text()
-              setAPIKey(text);
-          }
+    const getData = async () => {
+      let out: Movie[] = []
+      for (let movie of movieList) {
+        const res = await fetch(`http://localhost:8080/api/omdb?title=${movie}`)
+        const singleMovie = await res.json()
+        out.push({
+            title: singleMovie.Title,
+            year: singleMovie.Year,
+            rated: singleMovie.Rated,
+            released: singleMovie.Released,
+            genre: singleMovie.Genre,
+            director: singleMovie.Director,
+            poster: singleMovie.Poster
+        })
       }
-      getAPI()
-      return () => {
-          ignore = true;
-      };
-  }, [])
-
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-      setUserLocation({
-        lat: 100,
-        long: 200,
-        error: "Geolocation is not supported by this browser."
-      })
+      setMovies(out)
     }
-  }
+    getData()
+    setLoading(false)
+  }, []);
 
-  function success(position: GeolocationPosition) {
-    const {latitude, longitude} = position.coords;
-    setUserLocation({
-      lat: latitude,
-      long: longitude,
-      error: ""
-    })
+  if(loading){
+    return <LoadingSpinner />
   }
-  function error() {
-    setUserLocation({
-      lat: 100,
-      long: 200,
-      error: "Unable to retrieve your location"
-    })
-  }
-
+  
   return (
       <>
       <h1>Welcome to MovieRouter.com</h1>
-      <div className="card">
-        <button onClick={() => getLocation()}>Click to get your location</button>
-      </div>
-      {(
-        userLocation.lat != 100  && <p> You are at {userLocation.lat}, {userLocation.long}</p> &&
-        <iframe
-          width="450"
-          height="250"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={'https://www.google.com/maps/embed/v1/place?key='+APIKey+'&q='+userLocation.lat+', '+userLocation.long}
-        >
-        </iframe>
-      )}
-      {(userLocation.error != "" && <p> {userLocation.error}</p>)}
       <p>
-        Welcome welcome
+        Welcome welcome {}
       </p>
+      <ul className="movieList" >
+        {movies.map((movie: Movie, index: number) => (
+          <li key={index}>
+              <div className="box">
+                  <div className="image">
+                    <img src={movie.poster} alt={movie.poster} className='poster'></img>
+                  </div>
+                  <div className="title">{movie.title}</div>
+                  <div className="year">{movie.year}</div>
+                  <div className="rated">{movie.rated}</div>
+                  <div className="released">{movie.released}</div>
+                  <div className="genre">{movie.genre}</div>
+                  <div className="director">{movie.director}</div>
+              </div>
+          </li>
+          ))}
+      </ul>
     </>
   )
 }

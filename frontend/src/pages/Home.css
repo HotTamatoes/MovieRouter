@@ -3,8 +3,26 @@
   text-align: center;
 }
 
-.card {
-    padding: 2em;
+.movieList {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  float: top-right;
+  margin-left: auto;
+  margin-bottom: auto;
+  gap: 1em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  overflow-x: auto;
 }
 
-
+.movieList li {
+  flex-direction: row;
+  text-align: left;
+  list-style: none;
+  padding: 1em;
+  background-color: #444444;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
