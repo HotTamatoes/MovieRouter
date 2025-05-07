@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 frontend/ignored
-api-key.txt
+*api-key*
 
 # Editor directories and files
 .vscode/*

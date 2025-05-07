@@ -1,29 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './Home.css'
-import rawAPIKey from '../../../api-key.txt'
+import { APIKey } from '../api-key.tsx'
 
 export default function Home() {
-  const [APIKey, setAPIKey] = useState('')
   const [userLocation, setUserLocation] = useState({
     lat: 100,
     long: 200,
     error: ""
   })
-    
-  useEffect(() => {
-      let ignore = false
-      const getAPI = async () => {
-          const result = await fetch(rawAPIKey)
-          if (!ignore) {
-              const text = await result.text()
-              setAPIKey(text);
-          }
-      }
-      getAPI()
-      return () => {
-          ignore = true;
-      };
-  }, [])
 
   function getLocation() {
     if (navigator.geolocation) {

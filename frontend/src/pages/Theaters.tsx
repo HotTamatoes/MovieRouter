@@ -1,7 +1,7 @@
-import rawAPIKey from "../../../api-key.txt"
+import { APIKey } from "../api-key.tsx"
 import './Theaters.css'
 import { useEffect, useState } from "react"
-
+import { APIProvider, Map } from "@vis.gl/react-google-maps"
 interface Theater {
     name: string
     address: string
@@ -10,7 +10,6 @@ interface Theater {
 }
 
 export default function Theaters() {
-    const [APIKey, setAPIKey] = useState('')
     const [theaterCount, setTheaterCount] = useState('Max')
     const [theaters, setTheaters] = useState<Theater[]>([])
     const [userLocation, setUserLocation] = useState({
@@ -18,21 +17,6 @@ export default function Theaters() {
         long: 200,
         error: ""
     })
-    
-    useEffect(() => {
-        let ignore = false
-        const getAPI = async () => {
-            const result = await fetch(rawAPIKey)
-            if (!ignore) {
-                const text = await result.text()
-                setAPIKey(text);
-            }
-        }
-        getAPI()
-        return () => {
-            ignore = true;
-        };
-    }, [])
 
     useEffect(() => {
         function getLocation() {
@@ -96,12 +80,15 @@ export default function Theaters() {
     return (
     <>
         <div className="theaterPage">
-            <iframe
-                className="google_map"
-                referrerPolicy="no-referrer-when-downgrade"
-                src={`https://www.google.com/maps/embed/v1/place?key=${APIKey}&q=${userLocation.lat},${userLocation.long}`}
-            >
-            </iframe>
+            <div className="googleMap">
+                <APIProvider apiKey={APIKey}>
+                    <Map
+                        defaultZoom={13}
+                        defaultCenter={ {lat: -33.860664, lng: 151.208138 } }
+                    >
+                    </Map>
+                </APIProvider>
+            </div>
             <div className="listing">
                 {userLocation.lat != 100 &&
                     <div>

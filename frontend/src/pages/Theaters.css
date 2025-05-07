@@ -8,14 +8,9 @@ body {
     width: 100vw;
 }
 
-.google_map{
+.googleMap{
     width:70%;
     height: 100%;
-}
-
-.google_map iframe{
-    width:100%;
-    height:100%;
 }
 
 .listing {
