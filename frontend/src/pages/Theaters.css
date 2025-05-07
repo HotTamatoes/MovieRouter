@@ -4,7 +4,7 @@ body {
 
 .theaterPage{
     display: flex;
-    height: calc(100vh - 6.9em);
+    height: calc(100vh - 6.5em);
     width: 100vw;
 }
 
@@ -22,7 +22,7 @@ body {
 }
 
 .theaterList {
-    height: calc(100vh - 13em);
+    height: calc(100vh - 12em);
     display: flex;
     flex-direction: column;
     float: top-right;
@@ -35,6 +35,7 @@ body {
 }
 
 .theaterList li {
+    flex-direction: row;
     text-align: left;
     list-style: none;
     padding: 1em;
@@ -42,6 +43,18 @@ body {
     border: 1px solid #ccc;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.box .title {
+    font-size: 1.5em;
+    font-style: bold;
+}
+.box .address {
+    font-style: italic;
+}
+
+.theaterList li:hover {
+    background-color: #888888;
 }
 
 .results {
@@ -56,4 +69,31 @@ body {
     margin-bottom: auto;
     padding-top: 0.3em;
     padding-bottom: 0.3em;
+}
+
+@media screen and (max-width: 60.4em) {
+    .theaterPage {
+        height: calc(100vh - 8.5em);
+    }
+    .theaterList {
+        height: calc(100vh - 14em);
+    }
+}
+@media screen and (max-width: 55em) {
+    .theaterPage {
+        height: calc(100vh - 11.8em);
+    }
+    .theaterList {
+        height: calc(100vh - 17em);
+    }
+}
+@media screen and (max-width: 44.72em) {
+    .theaterList {
+        height: calc(100vh - 18.5em);
+    }
+}
+@media screen and (max-width: 30.62em) {
+    .theaterList {
+        height: calc(100vh - 20em);
+    }
 }

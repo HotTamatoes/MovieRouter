@@ -13,6 +13,15 @@ type Theater struct {
 	Address     string      `json:"vicinity"`
 	Rating      json.Number `json:"rating"`
 	RatingCount json.Number `json:"user_ratings_total"`
+	Geometry    Geometry    `json:"geometry"`
+}
+
+type Geometry struct {
+	Location Location `json:"location"`
+}
+type Location struct {
+	Lat json.Number `json:"lat"`
+	Lon json.Number `json:"lng"`
 }
 
 var input = []byte(`{
@@ -1101,7 +1110,6 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 	var theaters struct {
 		Results []Theater `json:"results"`
 	}
-
 	fmt.Println("Starting movie info search with location: " + r.URL.Query().Get("location"))
 
 	location := r.URL.Query().Get("location")
@@ -1121,7 +1129,10 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("searchURL: ", searchURL)
 
-	req, _ := http.NewRequest("GET", searchURL, nil)
+	req, err := http.NewRequest("GET", searchURL, nil)
+	if err != nil {
+		panic(err)
+	}
 	req.Header.Add("Accept-Charset", "utf-8")
 
 	resp, err := http.DefaultClient.Do(req)
@@ -1131,17 +1142,16 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 	fmt.Println("Web has been requested")
 
-	/*
-		oink := bytes.NewReader(input)
-		buf := new(strings.Builder)
-		io.Copy(buf, oink)
-		fmt.Fprint(w, buf.String())
-	*/
-
 	err2 := json.NewDecoder(resp.Body).Decode(&theaters)
 	if err2 != nil {
 		http.Error(w, err2.Error(), http.StatusBadRequest)
 		return
 	}
+	/*
+		err := json.Unmarshal(input, &theaters)
+		if err != nil {
+			panic(err)
+		}
+	*/
 	json.NewEncoder(w).Encode(theaters)
 }

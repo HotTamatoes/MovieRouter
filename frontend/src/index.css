@@ -68,6 +68,19 @@ button:focus-visible {
   }
 }
 
+@media screen and (max-width: 60.4em) {
+  body {
+    padding-top: 8.5em;
+    min-height: calc(100vh - 8.5em);
+  }
+}
+@media screen and (max-width: 55em) {
+  body {
+    padding-top: 11.8em;
+    min-height: calc(100vh - 11.8em);
+  }
+}
+
 show {
   display: block;
 }
