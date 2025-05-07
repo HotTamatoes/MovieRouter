@@ -1,7 +1,7 @@
 import rawAPIKey from "../../../api-key.txt"
 import './Theaters.css'
 import { useEffect, useState } from "react"
-import { APIProvider, latLngEquals, Map } from "@vis.gl/react-google-maps"
+import LoadingSpinner from "../components/LoadingSpinner"
 interface Theater {
     name: string
     address: string
@@ -163,6 +163,10 @@ export default function Theaters() {
             }));
         });
     }, [loaded, userLocation, theaters]);
+
+    if(theaters.length == 0) {
+        return <LoadingSpinner />
+    }
 
     return (
     <>
