@@ -25,7 +25,7 @@ const router = createBrowserRouter(
         <Route path="Genres" element={<Genres />} />
         <Route path="Recommended" element={<Recommended />} />
         <Route path="Theaters" element={<Theaters />} />
-        <Route path="Search/:query" element={<Search />} />
+        <Route path="Search" element={<Search />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>
     </>
