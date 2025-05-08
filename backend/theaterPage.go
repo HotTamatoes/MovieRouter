@@ -21,7 +21,7 @@ type Geometry struct {
 }
 type Location struct {
 	Lat json.Number `json:"lat"`
-	Lon json.Number `json:"lng"`
+	Lng json.Number `json:"lng"`
 }
 
 func getTheaterList(w http.ResponseWriter, r *http.Request) {

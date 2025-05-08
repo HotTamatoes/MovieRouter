@@ -16,9 +16,10 @@ type Movie struct {
 	Director string `json:"Director"`
 	Plot     string `json:"Plot"`
 	Poster   string `json:"Poster"`
+	ImdbID   string `json:"ImdbID"`
 }
 
-func omdbSingle(w http.ResponseWriter, r *http.Request) { //https://github.com/martinstarkov/movie-posters/blob/master/js/javascript.js
+func omdbSingle(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
@@ -31,6 +32,18 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) { //https://github.com/m
 		http.Error(w, "Both Movie Title and ID were Provided", http.StatusBadRequest)
 		return
 	}
+	var movie Movie
+	if movieTitle == "" {
+		movie = getMovieSQLId(movieIMDB)
+	} else {
+		movie = getMovieSQLTitle(movieTitle)
+	}
+	if movie.Poster != "" {
+		fmt.Println("got " + movie.Title + " from database")
+		json.NewEncoder(w).Encode(movie)
+		return
+	}
+
 	var req *http.Request
 	var err error
 	if movieTitle == "" {
@@ -51,11 +64,11 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) { //https://github.com/m
 	defer resp.Body.Close()
 	fmt.Println("Web has been requested for Movie titled: " + movieTitle + " / With ID: " + movieIMDB)
 
-	var movie Movie
 	err2 := json.NewDecoder(resp.Body).Decode(&movie)
 	if err2 != nil {
 		http.Error(w, err2.Error(), http.StatusBadRequest)
 		return
 	}
+	putMovieSQL(movie)
 	json.NewEncoder(w).Encode(movie)
 }

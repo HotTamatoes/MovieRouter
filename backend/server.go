@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 var port = ":8080"
 var GOOGLE_API_KEY string
 var OMDB_API_KEY string
+var db *sql.DB
 
 func main() {
 	byteGAPIKey, err := os.ReadFile("../google-maps-api-key.txt")
@@ -25,6 +27,9 @@ func main() {
 		log.Fatal(err)
 	}
 	OMDB_API_KEY = string(byteOAPIKey)
+
+	db = connectToSQL()
+	defer disconnectSQL()
 
 	router := mux.NewRouter()
 	router.HandleFunc("/api/theaterlist", getTheaterList).Methods("GET")
