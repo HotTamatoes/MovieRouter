@@ -19,7 +19,7 @@ export default function Theaters() {
     const [APIKey, setAPIKey] = useState<string>('')
     const [theaterCount, setTheaterCount] = useState('Max')
     const [theaters, setTheaters] = useState<Theater[]>([])
-    const [loaded, setloaded] = useState(false);
+    const [loaded, setLoaded] = useState(false)
     const [userLocation, setUserLocation] = useState({
         lat: 100,
         long: 200,
@@ -46,7 +46,7 @@ export default function Theaters() {
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${APIKey}&libraries=marker&v=weekly`;
         script.async = true;
-        script.onload = () => setloaded(true);
+        script.onload = () => setLoaded(true);
         document.head.appendChild(script);
     }, [APIKey]);
 
@@ -55,11 +55,11 @@ export default function Theaters() {
             if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error);
             } else {
-            setUserLocation({
-                lat: 100,
-                long: 200,
-                error: "Geolocation is not supported by this browser."
-            })
+                setUserLocation({
+                    lat: 100,
+                    long: 200,
+                    error: "Geolocation is not supported by this browser."
+                })
             }
         }
         getLocation()
@@ -164,8 +164,11 @@ export default function Theaters() {
         });
     }, [loaded, userLocation, theaters]);
 
-    if(theaters.length == 0) {
+    if(theaters.length == 0 && userLocation.error == "") {
         return <LoadingSpinner />
+    }
+    if(userLocation.error != ""){
+        return <p>Error: {userLocation.error}</p>
     }
 
     return (

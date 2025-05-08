@@ -40,6 +40,14 @@ export default function Home() {
     setLoading(false)
   }, []);
 
+  const scrollContainer = document.getElementById("movieList");
+  if(scrollContainer) {
+    scrollContainer.addEventListener("wheel", (evt) => {
+      evt.preventDefault();
+      scrollContainer.scrollLeft += (evt.deltaY/5)
+    ;})
+  ;}
+
   if(loading){
     return <LoadingSpinner />
   }
@@ -50,7 +58,7 @@ export default function Home() {
       <p>
         Welcome welcome {}
       </p>
-      <ul className="movieList" >
+      <ul className="movieList" id="movieList">
         {movies.map((movie: Movie, index: number) => (
           <li key={index}>
               <div className="box">

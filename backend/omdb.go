@@ -48,7 +48,7 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) { //https://github.com/m
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Web has been requested for Movie titled: " + movieTitle)
+	fmt.Println("Web has been requested for Movie titled: " + movieTitle + " / With ID: " + movieIMDB)
 
 	var movie Movie
 	err2 := json.NewDecoder(resp.Body).Decode(&movie)
