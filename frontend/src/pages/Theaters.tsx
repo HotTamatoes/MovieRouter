@@ -8,7 +8,7 @@ interface Theater {
     rating: string
     rating_count: string
     lat: string
-    long: string
+    lng: string
 }
 
 let map: google.maps.Map
@@ -22,7 +22,7 @@ export default function Theaters() {
     const [loaded, setLoaded] = useState(false)
     const [userLocation, setUserLocation] = useState({
         lat: 100,
-        long: 200,
+        lng: 200,
         error: ""
     })
     
@@ -57,7 +57,7 @@ export default function Theaters() {
             } else {
                 setUserLocation({
                     lat: 100,
-                    long: 200,
+                    lng: 200,
                     error: "Geolocation is not supported by this browser."
                 })
             }
@@ -70,14 +70,14 @@ export default function Theaters() {
         const {latitude, longitude} = position.coords;
         setUserLocation({
         lat: latitude,
-        long: longitude,
+        lng: longitude,
         error: ""
         })
     }
     function error() {
         setUserLocation({
         lat: 100,
-        long: 200,
+        lng: 200,
         error: "Unable to retrieve your location"
         })
     }
@@ -102,7 +102,7 @@ export default function Theaters() {
 
     useEffect(() => {
         const getData = async () => {
-            const res = await fetch(`http://localhost:8080/api/theaterlist?location=${userLocation.lat},${userLocation.long}`)
+            const res = await fetch(`http://localhost:8080/api/theaterlist?location=${userLocation.lat},${userLocation.lng}`)
             const resJson = await res.json()
             let out: Theater[] = []
             for (const theater of resJson.results) {
@@ -112,7 +112,7 @@ export default function Theaters() {
                     rating: '' + theater.rating,
                     rating_count: '' + theater.user_ratings_total,
                     lat: '' + theater.geometry.location.lat,
-                    long: '' + theater.geometry.location.lng
+                    lng: '' + theater.geometry.location.lng
                 })
             }
             setTheaters(out)
@@ -137,7 +137,7 @@ export default function Theaters() {
         if (theaters.length == 0) return;
 
         map = new google.maps.Map(element, {
-            center: { lat: userLocation.lat, lng: userLocation.long },
+            center: { lat: userLocation.lat, lng: userLocation.lng },
             zoom: 11,
             mapId: 'map'
         });
@@ -148,14 +148,14 @@ export default function Theaters() {
         })
         markers.push(new google.maps.marker.AdvancedMarkerElement({
             map,
-            position: { lat: userLocation.lat, lng: userLocation.long },
+            position: { lat: userLocation.lat, lng: userLocation.lng },
             title: "You are here",
             content: herePin.element
         }));
         [...theaterData].reverse().forEach((theater: Theater) => {
             markers.push(new google.maps.marker.AdvancedMarkerElement({
                 map,
-                position: { lat: Number(theater.lat), lng: Number(theater.long) },
+                position: { lat: Number(theater.lat), lng: Number(theater.lng) },
                 title: theater.name,
                 content: new google.maps.marker.PinElement({
                     glyph: '📽️',
