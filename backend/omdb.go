@@ -14,6 +14,7 @@ type Movie struct {
 	Released string `json:"Released"`
 	Genre    string `json:"Genre"`
 	Director string `json:"Director"`
+	Plot     string `json:"Plot"`
 	Poster   string `json:"Poster"`
 }
 
@@ -33,12 +34,12 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) { //https://github.com/m
 	var req *http.Request
 	var err error
 	if movieTitle == "" {
-		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?i="+movieIMDB+"&apikey="+OMDB_API_KEY, nil)
+		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+OMDB_API_KEY+"&plot=full&i="+movieIMDB, nil)
 		if err != nil {
 			panic(err)
 		}
 	} else {
-		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?t="+movieTitle+"&apikey="+OMDB_API_KEY, nil)
+		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+OMDB_API_KEY+"&plot=full&t="+movieTitle, nil)
 		if err != nil {
 			panic(err)
 		}
