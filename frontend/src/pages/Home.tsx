@@ -44,7 +44,7 @@ export default function Home() {
   if(scrollContainer) {
     scrollContainer.addEventListener("wheel", (evt) => {
       evt.preventDefault();
-      scrollContainer.scrollLeft += (evt.deltaY/5)
+      scrollContainer.scrollLeft += (evt.deltaY/2)
     ;})
   ;}
 
