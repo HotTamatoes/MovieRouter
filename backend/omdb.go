@@ -22,14 +22,26 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) { //https://github.com/m
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	movieTitle := r.URL.Query().Get("title")
-	if movieTitle == "" {
-		http.Error(w, "Movie Title was not Provided", http.StatusBadRequest)
+	movieIMDB := r.URL.Query().Get("id")
+	if movieTitle == "" && movieIMDB == "" {
+		http.Error(w, "Both Movie Title and ID were not Provided", http.StatusBadRequest)
+		return
+	} else if movieTitle != "" && movieIMDB != "" {
+		http.Error(w, "Both Movie Title and ID were Provided", http.StatusBadRequest)
 		return
 	}
-
-	req, err := http.NewRequest("GET", "http://www.omdbapi.com/?t="+movieTitle+"&apikey="+OMDB_API_KEY, nil)
-	if err != nil {
-		panic(err)
+	var req *http.Request
+	var err error
+	if movieTitle == "" {
+		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?i="+movieIMDB+"&apikey="+OMDB_API_KEY, nil)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?t="+movieTitle+"&apikey="+OMDB_API_KEY, nil)
+		if err != nil {
+			panic(err)
+		}
 	}
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

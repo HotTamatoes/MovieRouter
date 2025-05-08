@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react'
 import './Home.css'
 import LoadingSpinner from '../components/LoadingSpinner'
 
-const movieList: string[] = ['thunderbolts&y=2025', 'sinners&y=2025', 'a+minecraft+movie', 'the+accountant+2', 'shadow+force&y=2025',
-  'fight+or+flight', 'clown+in+a+cornfield', 'until+dawn', 'juliet+&+romeo', 'the+king+of+kings', 'the+amateur', 'warfare']
-  const singleMovieList: string[] = ['a+minecraft+movie']
+const movieList: string[] = ['tt20969586', 'tt31193180', 'tt3566834', 'tt7068946', 'tt11092020',
+  'tt13652286', 'tt23060698', 'tt30955489', 'tt26597666', 'tt7967302', 'tt0899043', 'tt31434639']
 
 interface Movie {
   title:    string
@@ -23,7 +22,7 @@ export default function Home() {
     const getData = async () => {
       let out: Movie[] = []
       for (let movie of movieList) {
-        const res = await fetch(`http://localhost:8080/api/omdb?title=${movie}`)
+        const res = await fetch(`http://localhost:8080/api/omdb?id=${movie}`)
         const singleMovie = await res.json()
         out.push({
             title: singleMovie.Title,
