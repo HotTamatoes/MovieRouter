@@ -13,7 +13,8 @@
     right: 0;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
-    background-color: #141414;
+    background-color: var(--darker-color);
+    color: var(--text-color);
 }
 
 .logobox {
@@ -38,16 +39,17 @@
 }
 
 .navbar a {
-    background-color: #444444;
+    background-color: var(--lighter-color);
+    color: var(--text-color);
     float: left;
     font-size: 1em;
-    color: white;
+    font-weight: 600;
     text-align: center;
     padding: 0.6em 1.2em;
     text-decoration: none;
 }
 .navbar a:hover {
-    background-color: #ddd;
+    background-color: var(--hover-color);
 }
 
 .headbar form {
@@ -67,13 +69,6 @@
     border: none;
     font-size: 1em;
     height: 1.5em;
-}
-
-@media (prefers-color-scheme: light) {
-    .headbar {
-        color: #213547;
-        background-color: #ffffff;
-    }
 }
 
 @media screen and (max-width: 55em) {

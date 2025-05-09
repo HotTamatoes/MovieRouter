@@ -35,8 +35,8 @@
     text-align: left;
     list-style: none;
     padding: 1em;
-    background-color: #444444;
-    border: 1px solid #ccc;
+    background-color: var(--lighter-color);
+    border: 1px solid var(--hover-color);
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
 }

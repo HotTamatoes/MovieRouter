@@ -12,7 +12,7 @@ export default function Navbar() {
                     <Link to="/">
                         <img src={logo} className="logo" alt="MovieRouterLogo" />
                     </Link>
-                    <Link to="/" style={{ color: 'var(--color)' }}>
+                    <Link to="/" style={{ color: 'var(--text-color)' }}>
                         <h1 className="caveat">Movie Router</h1>
                     </Link>
                 </div>

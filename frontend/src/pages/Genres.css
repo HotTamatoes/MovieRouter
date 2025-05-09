@@ -5,6 +5,8 @@ body {
 .genrenavbar {
     flex-direction: row;
     float: top-left;
+    position: sticky;
+    top: 0;
 }
 
 .genrebutton {
@@ -14,12 +16,12 @@ body {
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
-    background-color: #1a1a1a;
+    background-color: var(--darker-color);
     cursor: pointer;
     transition: border-color 0.25s;
 }
 .genrebutton:hover {
-    border-color: #646cff;
+    border-color: var(--button-hover);
 }
 .genrebutton:focus, .genrebutton:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
