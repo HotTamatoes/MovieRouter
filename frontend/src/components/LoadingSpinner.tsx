@@ -1,5 +1,5 @@
 import './LoadingSpinner.css'
-import reel from '../assets/reel.png'
+import reel from '../assets/Reel.png'
 
 export default function LoadingSpinner() {
     return <div className="spinner">
