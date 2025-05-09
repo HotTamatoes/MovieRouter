@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,9 +11,9 @@ import (
 )
 
 type Secrets struct {
-	Keys ApiKey
-	DBConStr   string
-	Port string
+	Keys     ApiKey
+	DBConStr string
+	Port     string
 }
 type ApiKey struct {
 	Google string
@@ -31,7 +30,7 @@ func loadSecrets() Secrets {
 			Omdb:   os.Getenv("OMDB_API_KEY"),
 		},
 		DBConStr: os.Getenv("POSTGRES_CON_STR"),
-		Port: os.Getenv("GO_PORT"),
+		Port:     os.Getenv("GO_PORT"),
 	}
 	return out
 }
@@ -47,8 +46,6 @@ func main() {
 	router.HandleFunc("/api/test", test).Methods("GET")
 	router.HandleFunc("/api/testjson", testJson).Methods("GET")
 	router.HandleFunc("/api/omdb", omdbSingle).Methods("GET")
-
-	fmt.Println("http://localhost" + secrets.Port)
 
 	log.Fatal(http.ListenAndServe(secrets.Port, router))
 }

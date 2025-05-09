@@ -9,9 +9,8 @@ import (
 )
 
 func connectToSQL() *sql.DB {
-	sqlConnectionString := secrets.DBConStr
 
-	db, err := sql.Open("postgres", sqlConnectionString)
+	db, err := sql.Open("postgres", secrets.DBConStr)
 	if err != nil {
 		log.Fatal(err)
 	}
