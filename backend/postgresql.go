@@ -9,8 +9,7 @@ import (
 )
 
 func connectToSQL() *sql.DB {
-	sqlConnectionString := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
-		secrets.DB.Postgres_user, secrets.DB.Postgres_pass, secrets.DB.Postgres_port, secrets.DB.Postgres_db)
+	sqlConnectionString := secrets.DBConStr
 
 	db, err := sql.Open("postgres", sqlConnectionString)
 	if err != nil {

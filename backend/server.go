@@ -13,18 +13,12 @@ import (
 
 type Secrets struct {
 	Keys ApiKey
-	DB   PostgresSecret
+	DBConStr   string
 	Port string
 }
 type ApiKey struct {
 	Google string
 	Omdb   string
-}
-type PostgresSecret struct {
-	Postgres_user string
-	Postgres_pass string
-	Postgres_port string
-	Postgres_db   string
 }
 
 var secrets Secrets
@@ -36,12 +30,7 @@ func loadSecrets() Secrets {
 			Google: os.Getenv("GOOGLE_MAPS_API_KEY"),
 			Omdb:   os.Getenv("OMDB_API_KEY"),
 		},
-		DB: PostgresSecret{
-			Postgres_user: os.Getenv("POSTGRES_USER"),
-			Postgres_pass: os.Getenv("POSTGRES_PASS"),
-			Postgres_port: os.Getenv("POSTGRES_PORT"),
-			Postgres_db:   os.Getenv("POSTGRES_DB"),
-		},
+		DBConStr: os.Getenv("POSTGRES_CON_STR"),
 		Port: os.Getenv("GO_PORT"),
 	}
 	return out
