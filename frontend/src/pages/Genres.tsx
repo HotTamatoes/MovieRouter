@@ -30,6 +30,11 @@ function goToTarget(id: string){
     target?.scrollIntoView({behavior:"instant", block:"center"})
 }
 
+function goToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
 export default function Genres() {
     const [loading, setLoading] = useState(true)
     const [movies, setMovies] = useState<Movie[]>([])
@@ -80,6 +85,7 @@ export default function Genres() {
                 {genre}
             </div>
         ))}
+        <div className="genrebutton" onClick={() => goToTop()}>Top</div>
         </div>
         {genres.map((genre) => {
             const genreMovies = movies.filter((movie) =>
