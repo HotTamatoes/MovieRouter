@@ -2,7 +2,7 @@ export default function Genres() {
     return (
     <>
         <p >
-            sup
+            🚧🪓This Page is under construction⚠️🚧
         </p>
     </>
     )

@@ -7,7 +7,6 @@
   width: calc(100vw - 1em);
   display: flex;
   flex-direction: row;
-  float: top-right;
   margin-left: auto;
   margin-bottom: auto;
   gap: 1em;
@@ -18,23 +17,118 @@
 
 .movieList li {
   flex-direction: row;
-  text-align: left;
   list-style: none;
-  padding: 1em;
-  background-color: var(--lighter-color);
-  border: 1px solid var(--hover-color);
-  border-radius: 6px;
+  align-items: center;
   box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
-  margin-bottom: 1em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.movieList li .image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30em;
+  width: 20em;
+  overflow: hidden;
+}
+.movieList li .poster {
+  height: 30em;
+  width: auto;
+}
+.movieList li .text {
+  display: none;
+}
+.movieList li:hover {
+  scale:125%;
 }
 
 .movieList::after {
-  content: '';  /* Insert pseudo-element */
+  content: '';
   padding: 0.1px;
-  margin: auto; /* Make it push flex items to the center */
+  margin: auto;
+}
+.movieList::before {
+  content: '';
+  margin: auto;
 }
 
-.movieList::before {
-  content: '';  /* Insert pseudo-element */
-  margin: auto; /* Make it push flex items to the center */
+.movieList .selected:hover {
+  scale: 100%;
+}
+.movieList .selected ~ #overlay {
+  display: block
+}
+
+#overlay{
+  background: rgba(0,0,0,0.6);
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  display: none;
+}
+
+.movieList .selected {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 50%;
+  left: 50%;
+  width: 75vw;
+  width: 75dvw;
+  height: 75vh;
+  height: 75dvh;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background-color: var(--darker-color);
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
+
+/* Image section */
+.image {
+  flex-shrink: 0;
+}
+
+.poster {
+  width: 150px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Text section */
+.movieList .selected .text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+  color: var(--text-color);
+}
+
+/* Title and year side by side */
+.yearByTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+/* Individual info items */
+.rated,
+.released,
+.genre,
+.director {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  color: var(--lighter-color);
 }

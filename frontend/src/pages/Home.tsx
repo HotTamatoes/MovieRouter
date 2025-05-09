@@ -14,6 +14,19 @@ interface Movie {
 	director: string
 	poster:   string
 }
+
+
+function movieBoxisActive(index: number) {
+  const movieBoxes = document.querySelectorAll('#movieList li');
+  movieBoxes[index].classList.add('selected')
+}
+export function setInactive() {
+  const movieBoxes = document.querySelectorAll(".selected")
+  movieBoxes.forEach((movie) => {
+    movie.classList.remove('selected')
+  })
+}
+
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [movies, setMovies] = useState<Movie[]>([])
@@ -53,25 +66,28 @@ export default function Home() {
   }
   
   return (
-      <>
-      <h1>Welcome to Movie-Router.com</h1>
-      <ul className="movieList" id="movieList">
-        {movies.map((movie: Movie, index: number) => (
-          <li key={index}>
-              <div className="box">
-                  <div className="image">
-                    <img src={movie.poster} alt={movie.poster} className='poster'></img>
-                  </div>
-                  <div className="title">{movie.title}</div>
-                  <div className="year">{movie.year}</div>
-                  <div className="rated">{movie.rated}</div>
-                  <div className="released">{movie.released}</div>
-                  <div className="genre">{movie.genre}</div>
-                  <div className="director">{movie.director}</div>
-              </div>
-          </li>
-          ))}
-      </ul>
+    <>
+    <h1>Welcome to Movie-Router.com</h1>
+    <ul className="movieList" id="movieList">
+      {movies.map((movie: Movie, index: number) => (
+        <li key={index} onClick={() => movieBoxisActive(index)}>
+          <div className="image">
+            <img src={movie.poster} alt={movie.poster} className='poster'></img>
+          </div>
+          <div className="text">
+            <div className="yearByTitle">
+              <div className="title">{movie.title}</div>
+              <div>({movie.year})</div>
+            </div>
+            <div className="rated">{movie.rated}</div>
+            <div className="released">{movie.released}</div>
+            <div className="genre">{movie.genre}</div>
+            <div className="director">{movie.director}</div>
+          </div>
+        </li>
+        ))}
+      <div id="overlay" onClick={setInactive}></div>
+    </ul>
     </>
   )
 }

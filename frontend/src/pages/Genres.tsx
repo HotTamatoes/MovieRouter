@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import './Genres.css'
+import { setInactive } from "./Home";
 
 const movieList: string[] = ['tt20969586', 'tt31193180', 'tt3566834', 'tt7068946', 'tt11092020',
     'tt13652286', 'tt23060698', 'tt30955489', 'tt26597666', 'tt7967302', 'tt0899043', 'tt31434639']
@@ -33,6 +34,14 @@ function goToTarget(id: string){
 function goToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+}
+
+function movieBoxisActive(genre: string, index: number) {
+    const list = document.querySelector(`#${genre} .movieList`)
+    const movieBoxes = list?.querySelectorAll('li');
+    if (movieBoxes && movieBoxes[index]) {
+        movieBoxes[index].classList.add('selected')
+    }
 }
 
 export default function Genres() {
@@ -99,13 +108,15 @@ export default function Genres() {
                     <p>{genre}</p>
                     <ul className="movieList" id="movieList">
                         {genreMovies.map((movie, index) => (
-                            <li key={index}>
-                                <div className="box">
-                                    <div className="image">
-                                        <img src={movie.poster} alt={movie.title} className="poster" />
-                                    </div>
+                            <li key={index} onClick={() => movieBoxisActive(genre, index)}>
+                                <div className="image">
+                                    <img src={movie.poster} alt={movie.poster} className='poster'></img>
+                                </div>
+                                <div className="text">
+                                    <div className="yearByTitle">
                                     <div className="title">{movie.title}</div>
-                                    <div className="year">{movie.year}</div>
+                                    <div>({movie.year})</div>
+                                    </div>
                                     <div className="rated">{movie.rated}</div>
                                     <div className="released">{movie.released}</div>
                                     <div className="genre">{movie.genre}</div>
@@ -113,6 +124,7 @@ export default function Genres() {
                                 </div>
                             </li>
                         ))}
+                        <div id="overlay" onClick={setInactive}></div>
                     </ul>
                 </div>
             );
