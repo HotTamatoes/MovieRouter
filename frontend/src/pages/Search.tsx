@@ -28,9 +28,9 @@ export default function Search() {
     }
     if(query.length > 5 && query.length <= 10 &&
         query.substring(0,2) == "tt" && Number.isNaN(Number(query.substring(2)))){
-        url = `http://localhost:8080/api/omdb?id=${query}`
+        url = `http://${import.meta.env.VITE_GOSERVER_DOMAIN}:${import.meta.env.VITE_GOSERVER_PORT}/api/omdb?id=${query}`
     } else {
-        url = `http://localhost:8080/api/omdb?title=${query}`
+        url = `http://${import.meta.env.VITE_GOSERVER_DOMAIN}:${import.meta.env.VITE_GOSERVER_PORT}/api/omdb?title=${query}`
     }
 
     useEffect(() => {

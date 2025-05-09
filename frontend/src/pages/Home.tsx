@@ -22,7 +22,7 @@ export default function Home() {
     const getData = async () => {
       let out: Movie[] = []
       for (let movie of movieList) {
-        const res = await fetch(`http://localhost:8080/api/omdb?id=${movie}`)
+        const res = await fetch(`http://${import.meta.env.VITE_GOSERVER_DOMAIN}:${import.meta.env.VITE_GOSERVER_PORT}/api/omdb?id=${movie}`)
         const singleMovie = await res.json()
         out.push({
             title: singleMovie.Title,
