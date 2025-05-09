@@ -4,7 +4,7 @@
 }
 
 .movieList {
-  width: 100vw;
+  width: calc(100vw - 1em);
   display: flex;
   flex-direction: row;
   float: top-right;
@@ -25,4 +25,16 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+  margin-bottom: 1em;
+}
+
+.movieList::after {
+  content: '';  /* Insert pseudo-element */
+  padding: 0.1px;
+  margin: auto; /* Make it push flex items to the center */
+}
+
+.movieList::before {
+  content: '';  /* Insert pseudo-element */
+  margin: auto; /* Make it push flex items to the center */
 }

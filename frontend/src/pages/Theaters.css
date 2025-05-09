@@ -1,7 +1,3 @@
-body {
-    overflow: hidden
-}
-
 .theaterPage{
     display: flex;
     height: calc(100vh - 6.5em);
