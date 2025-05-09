@@ -27,7 +27,7 @@ export default function Search() {
         return
     }
     if(query.length > 5 && query.length <= 10 &&
-        query.substring(0,2) == "tt" && Number.isNaN(Number(query.substring(2)))){
+        query.substring(0,2) == "tt" && !Number.isNaN(Number(query.substring(2)))){
         url = `${import.meta.env.VITE_GOSERVER}/api/omdb?id=${query}`
     } else {
         url = `${import.meta.env.VITE_GOSERVER}/api/omdb?title=${query}`
@@ -62,7 +62,11 @@ export default function Search() {
     }
 
     if(movie.poster == "") {
-        return <><p>No movie was found with the title: {query}</p><p>You can try searching for the imdb id instead</p></>
+        return (
+        <>
+            <p>No movie was found with the title: {query}</p>
+            <p>You can try searching for the imdb id instead</p>
+        </>)
     }
 
     return (
