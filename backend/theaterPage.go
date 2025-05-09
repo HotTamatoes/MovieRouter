@@ -40,7 +40,7 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 
 	var url []string = []string{
 		"https://maps.googleapis.com/maps/api/place/nearbysearch/json",
-		"?key=" + GOOGLE_API_KEY,
+		"?key=" + secrets.Keys.Google,
 		"&location=" + location,
 		"&radius=25000",
 		"&type=movie_theater"}

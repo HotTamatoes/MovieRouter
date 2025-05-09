@@ -8,26 +8,43 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	_ "github.com/joho/godotenv/autoload"
 )
 
-var port = ":8080"
-var GOOGLE_API_KEY string
-var OMDB_API_KEY string
+type Secrets struct {
+	Keys ApiKey
+	DB   PostgresSecret
+	Port string
+}
+type ApiKey struct {
+	Google string
+	Omdb   string
+}
+type PostgresSecret struct {
+	Postgres_user string
+	Postgres_pass string
+}
+
+var secrets Secrets
 var db *sql.DB
 
+func loadSecrets() Secrets {
+	out := Secrets{
+		Keys: ApiKey{
+			Google: os.Getenv("GOOGLE_MAPS_API_KEY"),
+			Omdb:   os.Getenv("OMDB_API_KEY"),
+		},
+		DB: PostgresSecret{
+			Postgres_user: os.Getenv("POSTGRES_USER"),
+			Postgres_pass: os.Getenv("POSTGRES_PASS"),
+		},
+		Port: os.Getenv("GO_PORT"),
+	}
+	return out
+}
+
 func main() {
-	byteGAPIKey, err := os.ReadFile("../google-maps-api-key.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	GOOGLE_API_KEY = string(byteGAPIKey)
-
-	byteOAPIKey, err := os.ReadFile("../omdb-api-key.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	OMDB_API_KEY = string(byteOAPIKey)
-
+	secrets = loadSecrets()
 	db = connectToSQL()
 	defer disconnectSQL()
 
@@ -38,7 +55,7 @@ func main() {
 	router.HandleFunc("/api/testjson", testJson).Methods("GET")
 	router.HandleFunc("/api/omdb", omdbSingle).Methods("GET")
 
-	fmt.Println("http://localhost" + port)
+	fmt.Println("http://localhost" + secrets.Port)
 
-	log.Fatal(http.ListenAndServe(port, router))
+	log.Fatal(http.ListenAndServe(secrets.Port, router))
 }

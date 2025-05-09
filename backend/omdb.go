@@ -47,12 +47,12 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) {
 	var req *http.Request
 	var err error
 	if movieTitle == "" {
-		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+OMDB_API_KEY+"&plot=full&i="+movieIMDB, nil)
+		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+secrets.Keys.Omdb+"&plot=full&i="+movieIMDB, nil)
 		if err != nil {
 			panic(err)
 		}
 	} else {
-		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+OMDB_API_KEY+"&plot=full&t="+movieTitle, nil)
+		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+secrets.Keys.Omdb+"&plot=full&t="+movieTitle, nil)
 		if err != nil {
 			panic(err)
 		}
