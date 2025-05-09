@@ -54,10 +54,7 @@ export default function Home() {
   
   return (
       <>
-      <h1>Welcome to MovieRouter.com</h1>
-      <p>
-        Welcome welcome {}
-      </p>
+      <h1>Welcome to Movie-Router.com</h1>
       <ul className="movieList" id="movieList">
         {movies.map((movie: Movie, index: number) => (
           <li key={index}>
