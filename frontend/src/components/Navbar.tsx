@@ -1,5 +1,5 @@
 import logo from '../assets/Logo.png'
-import { Link, Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import './Navbar.css'
 import Searchbar from './Searchbar'
 
@@ -9,18 +9,18 @@ export default function Navbar() {
         <>
             <div className="headbar">
                 <div className="logobox">
-                    <Link to="/">
+                    <NavLink to="/">
                         <img src={logo} className="logo" alt="MovieRouterLogo" />
-                    </Link>
-                    <Link to="/" style={{ color: 'var(--text-color)' }}>
+                    </NavLink>
+                    <NavLink to="/" style={{ color: 'var(--text-color)' }}>
                         <h1 className="caveat">Movie Router</h1>
-                    </Link>
+                    </NavLink>
                 </div>
                 <div className="navbar">
-                    <Link to="/">Home</Link>
-                    <Link to="genres">Genres</Link>
-                    <Link to="theaters">Theatres</Link>
-                    <Link to="recommended">Recommended</Link>
+                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="genres">Genres</NavLink>
+                    <NavLink to="theaters">Theatres</NavLink>
+                    <NavLink to="recommended">Recommended</NavLink>
                 </div>
                 <Searchbar />
             </div>

@@ -15,19 +15,23 @@
   --lighter-color: #444444;
   --hover-color: #bebebe;
   --button-hover: #646cff;
-  color: var(--text-color);
-  background-color: var(--primary-color);
 }
-
+html{
+  color: var(--text-color);
+}
 body {
+  background-color: var(--primary-color);
   padding-top: 6.5em;
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 100vw;
+  min-width: 100dvw;
   min-height: calc(100vh - 6.5em);
+  min-height: calc(100dvh - 6.5em);
   overflow: hidden
 }
+
 a{
   text-decoration: inherit;
 }
