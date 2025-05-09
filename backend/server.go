@@ -23,6 +23,7 @@ type ApiKey struct {
 type PostgresSecret struct {
 	Postgres_user string
 	Postgres_pass string
+	Postgres_port string
 	Postgres_db   string
 }
 
@@ -38,6 +39,7 @@ func loadSecrets() Secrets {
 		DB: PostgresSecret{
 			Postgres_user: os.Getenv("POSTGRES_USER"),
 			Postgres_pass: os.Getenv("POSTGRES_PASS"),
+			Postgres_port: os.Getenv("POSTGRES_PORT"),
 			Postgres_db:   os.Getenv("POSTGRES_DB"),
 		},
 		Port: os.Getenv("GO_PORT"),
