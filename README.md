@@ -31,5 +31,4 @@ use npm run
 
 The required env variables (either in a .env file inside /frontend or injected) are:
 VITE_GOOGLE_MAPS_API_KEY =
-VITE_GOSERVER_DOMAIN =
-VITE_GOSERVER_PORT =
+VITE_GOSERVER = http://localhost:8080
