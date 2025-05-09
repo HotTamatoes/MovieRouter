@@ -1,4 +1,3 @@
-import rawAPIKey from "../../../google-maps-api-key.txt"
 import './Theaters.css'
 import { useEffect, useState } from "react"
 import LoadingSpinner from "../components/LoadingSpinner"
@@ -16,7 +15,6 @@ let markers: google.maps.marker.AdvancedMarkerElement[]
 let lastMarker: google.maps.marker.AdvancedMarkerElement | null
 
 export default function Theaters() {
-    const [APIKey, setAPIKey] = useState<string>('')
     const [theaterCount, setTheaterCount] = useState('Max')
     const [theaters, setTheaters] = useState<Theater[]>([])
     const [loaded, setLoaded] = useState(false)
@@ -25,30 +23,14 @@ export default function Theaters() {
         lng: 200,
         error: ""
     })
-    
-    useEffect(() => {
-        let ignore = false
-        const getAPI = async () => {
-            const result = await fetch(rawAPIKey)
-            if (!ignore) {
-                const text = await result.text()
-                setAPIKey(text);
-            }
-        }
-        getAPI()
-        return () => {
-            ignore = true;
-        };
-    }, [])
 
     useEffect(() => {
-        if(APIKey == '') return;
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${APIKey}&libraries=marker&v=weekly`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&libraries=marker&v=weekly`;
         script.async = true;
         script.onload = () => setLoaded(true);
         document.head.appendChild(script);
-    }, [APIKey]);
+    }, []);
 
     useEffect(() => {
         function getLocation() {
