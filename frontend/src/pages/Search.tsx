@@ -51,7 +51,7 @@ export default function Search() {
         }
         getData()
         setLoading(false)
-    }, []);
+    }, [query]);
     
     if(loading) {
         return <LoadingSpinner />
