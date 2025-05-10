@@ -1,35 +1,16 @@
 import { useEffect, useState } from 'react'
 import './Home.css'
 import LoadingSpinner from '../components/LoadingSpinner'
+import MovieCard from '../components/MovieCard';
+import { Movie } from '../components/MovieCard';
 
 const movieList: string[] = ['tt20969586', 'tt31193180', 'tt3566834', 'tt7068946', 'tt11092020',
   'tt13652286', 'tt23060698', 'tt30955489', 'tt26597666', 'tt7967302', 'tt0899043', 'tt31434639']
 
-interface Movie {
-  title:    string
-	year:     string
-	rated:    string
-	released: string
-	genre:    string
-	director: string
-	poster:   string
-}
-
-
-function movieBoxisActive(index: number) {
-  const movieBoxes = document.querySelectorAll('#movieList li');
-  movieBoxes[index].classList.add('selected')
-}
-export function setInactive() {
-  const movieBoxes = document.querySelectorAll(".selected")
-  movieBoxes.forEach((movie) => {
-    movie.classList.remove('selected')
-  })
-}
-
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [movies, setMovies] = useState<Movie[]>([])
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
   useEffect(() => {
     const getData = async () => {
@@ -44,7 +25,9 @@ export default function Home() {
             released: singleMovie.Released,
             genre: singleMovie.Genre,
             director: singleMovie.Director,
-            poster: singleMovie.Poster
+            plot: singleMovie.Plot,
+            poster: singleMovie.Poster,
+            id: singleMovie.id
         })
       }
       setMovies(out)
@@ -52,6 +35,19 @@ export default function Home() {
     getData()
     setLoading(false)
   }, []);
+
+  function movieBoxisActive(index: number) {
+    const movieBoxes = document.querySelectorAll('#movieList li');
+    movieBoxes[index].classList.add('selected')
+    setActiveIndex(index)
+  }
+  function setInactive() {
+    const movieBoxes = document.querySelectorAll(".selected")
+    movieBoxes.forEach((movie) => {
+      movie.classList.remove('selected')
+    })
+    setActiveIndex(null)
+  }
 
   const scrollContainer = document.getElementById("movieList");
   if(scrollContainer) {
@@ -71,19 +67,7 @@ export default function Home() {
     <ul className="movieList" id="movieList">
       {movies.map((movie: Movie, index: number) => (
         <li key={index} onClick={() => movieBoxisActive(index)}>
-          <div className="image">
-            <img src={movie.poster} alt={movie.poster} className='poster'></img>
-          </div>
-          <div className="text">
-            <div className="yearByTitle">
-              <div className="title">{movie.title}</div>
-              <div>({movie.year})</div>
-            </div>
-            <div className="rated">{movie.rated}</div>
-            <div className="released">{movie.released}</div>
-            <div className="genre">{movie.genre}</div>
-            <div className="director">{movie.director}</div>
-          </div>
+          <MovieCard movie={movie} text={activeIndex === index ? 'text' : 'hidden'} />
         </li>
         ))}
       <div id="overlay" onClick={setInactive}></div>

@@ -1,20 +1,11 @@
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import './Genres.css'
-import { setInactive } from "./Home";
+import MovieCard from '../components/MovieCard';
+import { Movie } from '../components/MovieCard';
 
 const movieList: string[] = ['tt20969586', 'tt31193180', 'tt3566834', 'tt7068946', 'tt11092020',
     'tt13652286', 'tt23060698', 'tt30955489', 'tt26597666', 'tt7967302', 'tt0899043', 'tt31434639']
-
-interface Movie {
-    title:    string
-	year:     string
-	rated:    string
-	released: string
-	genre:    string
-	director: string
-	poster:   string
-}
 
 function addUniqueSections(input: string, existingGenres: string[]): string[] {
     const genres = input.split(',').map(s => s.trim())
@@ -36,19 +27,11 @@ function goToTop() {
     document.documentElement.scrollTop = 0;
 }
 
-function movieBoxisActive(genre: string, index: number) {
-    const list = document.querySelector(`#${genre} .movieList`)
-    const movieBoxes = list?.querySelectorAll('li');
-    if (movieBoxes && movieBoxes[index]) {
-        movieBoxes[index].classList.add('selected')
-    }
-}
-
 export default function Genres() {
     const [loading, setLoading] = useState(true)
     const [movies, setMovies] = useState<Movie[]>([])
     const [genres, setGenres] = useState<string[]>([])
-
+    const [activeIndexGenrePair, setActiveIndexGenrePair] = useState<{idx: number, gnr: string} | null>(null)
     useEffect(() => {
         const getData = async () => {
             let out: Movie[] = []
@@ -62,7 +45,9 @@ export default function Genres() {
                     released: singleMovie.Released,
                     genre: singleMovie.Genre,
                     director: singleMovie.Director,
-                    poster: singleMovie.Poster
+                    plot: singleMovie.Plot,
+                    poster: singleMovie.Poster,
+                    id: singleMovie.id
                 })
                 setGenres(addUniqueSections(singleMovie.Genre, genres))
             }
@@ -72,15 +57,33 @@ export default function Genres() {
         setLoading(false)
     }, []);
 
-    const scrollContainers = document.querySelectorAll(".movieList") as NodeListOf<HTMLElement>;
-    scrollContainers.forEach((scrollContainer) => {
-        if(scrollContainer.scrollWidth > scrollContainer.clientWidth) {
-            scrollContainer.addEventListener("wheel", (evt) => {
-                evt.preventDefault();
-                scrollContainer.scrollLeft += (evt.deltaY/2)
-            ;})
+    function movieBoxisActive(genre: string, index: number) {
+        const list = document.querySelector(`#${genre} .movieList`)
+        const movieBoxes = list?.querySelectorAll('li');
+        if (movieBoxes && movieBoxes[index]) {
+            movieBoxes[index].classList.add('selected')
+            setActiveIndexGenrePair({ idx: index, gnr: genre})
         }
-    ;})
+    }
+    function setInactive() {
+        const movieBoxes = document.querySelectorAll(".selected")
+        movieBoxes.forEach((movie) => {
+        movie.classList.remove('selected')
+        })
+        setActiveIndexGenrePair(null)
+    }
+
+    useEffect(() => {
+        const scrollContainers = document.querySelectorAll(".movieList") as NodeListOf<HTMLElement>;
+        scrollContainers.forEach((scrollContainer) => {
+            if(scrollContainer.scrollWidth > scrollContainer.clientWidth) {
+                scrollContainer.addEventListener("wheel", (evt) => {
+                    evt.preventDefault();
+                    scrollContainer.scrollLeft += (evt.deltaY/2)
+                ;})
+            }
+        ;})
+    }, [movies])
 
     if(loading){
         return <LoadingSpinner />
@@ -109,19 +112,10 @@ export default function Genres() {
                     <ul className="movieList" id="movieList">
                         {genreMovies.map((movie, index) => (
                             <li key={index} onClick={() => movieBoxisActive(genre, index)}>
-                                <div className="image">
-                                    <img src={movie.poster} alt={movie.poster} className='poster'></img>
-                                </div>
-                                <div className="text">
-                                    <div className="yearByTitle">
-                                    <div className="title">{movie.title}</div>
-                                    <div>({movie.year})</div>
-                                    </div>
-                                    <div className="rated">{movie.rated}</div>
-                                    <div className="released">{movie.released}</div>
-                                    <div className="genre">{movie.genre}</div>
-                                    <div className="director">{movie.director}</div>
-                                </div>
+                                <MovieCard
+                                    movie={movie}
+                                    text={(activeIndexGenrePair && activeIndexGenrePair.idx == index && activeIndexGenrePair.gnr == genre) ? 'text' : 'hidden'}
+                                />
                             </li>
                         ))}
                         <div id="overlay" onClick={setInactive}></div>

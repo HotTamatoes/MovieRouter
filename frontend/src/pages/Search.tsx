@@ -1,17 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
-interface Movie {
-    title:    string
-	year:     string
-	rated:    string
-	released: string
-	genre:    string
-	director: string
-    plot:     string
-	poster:   string
-    id:       string
-}
+import MovieCard, { Movie } from "../components/MovieCard";
 
 export default function Search() {
     const location = useLocation();
@@ -71,7 +61,7 @@ export default function Search() {
 
     return (
         <>
-            <img src={movie.poster} alt="Loading..."></img>
+            <MovieCard movie={movie} text="text" />
         </>
     )
 }

@@ -37,9 +37,6 @@
   height: 30em;
   width: auto;
 }
-.movieList li .text {
-  display: none;
-}
 .movieList li:hover {
   scale:125%;
 }
@@ -90,46 +87,4 @@
   max-width: 800px;
   margin: 20px auto;
   flex-wrap: wrap;
-}
-
-/* Image section */
-.image {
-  flex-shrink: 0;
-}
-
-.poster {
-  width: 150px;
-  height: auto;
-  border-radius: 4px;
-  object-fit: cover;
-}
-
-/* Text section */
-.movieList .selected .text {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 200px;
-  color: var(--text-color);
-}
-
-/* Title and year side by side */
-.yearByTitle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--text-color);
-  margin-bottom: 10px;
-}
-
-/* Individual info items */
-.rated,
-.released,
-.genre,
-.director {
-  margin-bottom: 6px;
-  font-size: 0.95rem;
-  color: var(--lighter-color);
 }
