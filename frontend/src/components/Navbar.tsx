@@ -22,6 +22,9 @@ export default function Navbar() {
                     <NavLink to="theaters">Theatres</NavLink>
                     <NavLink to="recommended">Recommended</NavLink>
                 </div>
+                <div className="warning">
+                    This Website is Under Construction, Estimated to be Complete In July 2025
+                </div>
                 <Searchbar />
             </div>
             <main>

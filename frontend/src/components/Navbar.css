@@ -75,6 +75,15 @@
     height: 1.5em;
 }
 
+.warning {
+    background-color: #bb0000;
+    align-content: center;
+    justify-content: center;
+    margin: 1.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
 @media screen and (max-width: 55em) {
     .headbar {   
         flex-direction: column;
