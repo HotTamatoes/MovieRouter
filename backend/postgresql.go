@@ -27,15 +27,23 @@ func disconnectSQL() {
 }
 
 func putMovieSQL(mov Movie) {
-	sqlStatement := `
+	sqlDelete := `
+		DELETE FROM movie WHERE id=$1
+	;`
+	_, err := db.Exec(sqlDelete, mov.ImdbID[2:])
+	if err != nil {
+		fmt.Println("Failed to execute SQL Delete:" + err.Error())
+	}
+
+	sqlInsert := `
 		INSERT INTO movie (title, released, genre, director, plot, poster, id, rated, year, expires)
 		VALUES ($1, to_date($2, 'DD Mon YYYY'), $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP + INTERVAL '7 days')
 	;`
 
-	_, err := db.Exec(sqlStatement,
+	_, err = db.Exec(sqlInsert,
 		mov.Title, mov.Released, mov.Genre, mov.Director, mov.Plot, mov.Poster, mov.ImdbID[2:], mov.Rated, mov.Year)
 	if err != nil {
-		fmt.Println("Failed to execute SQL command:" + err.Error())
+		fmt.Println("Failed to execute SQL Insert:" + err.Error())
 	}
 }
 
