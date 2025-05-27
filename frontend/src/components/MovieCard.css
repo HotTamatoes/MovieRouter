@@ -62,7 +62,7 @@
 
 .label {
     font-weight: 600;
-    color: var(--lighter-color);
+    color: var(--lightest-color);
     min-width: 70px;
 }
 
