@@ -4,8 +4,8 @@ import './Genres.css'
 import MovieCard from '../components/MovieCard';
 import { Movie } from '../components/MovieCard';
 
-const movieList: string[] = ['tt20969586', 'tt31193180', 'tt3566834', 'tt7068946', 'tt11092020',
-    'tt13652286', 'tt23060698', 'tt30955489', 'tt26597666', 'tt7967302', 'tt0899043', 'tt31434639']
+const movieList: string[] = ['tt11655566', 'tt9603208', 'tt1674782', 'tt32246771', 'tt9619824',
+    'tt26743210', 'tt30840798', 'tt30253514', 'tt31193180', 'tt20969586', 'tt32299316', 'tt8115900']
 
 function addUniqueSections(input: string, existingGenres: string[]): string[] {
     const genres = input.split(',').map(s => s.trim())
