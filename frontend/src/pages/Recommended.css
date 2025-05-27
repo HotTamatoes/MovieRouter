@@ -14,11 +14,9 @@
 }
 
 .card {
-    width: 75vw;
-    width: 75dvw;
-    height: 75vh;
-    height: 75dvh;
+    padding: 3em;
     justify-content: center;
-    align-items: center;
+    align-content: center;
+    background-color: var(--darker-color);
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
 }
