@@ -38,7 +38,7 @@
   width: auto;
 }
 .movieList li:hover {
-  scale:125%;
+  scale:110%;
 }
 
 .movieList::after {
