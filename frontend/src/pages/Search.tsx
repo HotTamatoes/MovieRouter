@@ -61,7 +61,9 @@ export default function Search() {
 
     return (
         <>
-            <MovieCard movie={movie} text="text" />
+            <div className="card">
+                <MovieCard movie={movie} text="text" />
+            </div>
         </>
     )
 }

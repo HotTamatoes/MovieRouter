@@ -24,19 +24,6 @@
   margin-top: 2em;
   margin-bottom: 2em;
 }
-
-.movieList li .image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30em;
-  width: 20em;
-  overflow: hidden;
-}
-.movieList li .poster {
-  height: 30em;
-  width: auto;
-}
 .movieList li:hover {
   scale:110%;
 }
