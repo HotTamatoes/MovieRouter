@@ -3,6 +3,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import './Genres.css'
 import MovieCard from '../components/MovieCard';
 import { Movie } from '../components/MovieCard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 const movieList: string[] = ['tt11655566', 'tt9603208', 'tt1674782', 'tt32246771', 'tt9619824',
     'tt26743210', 'tt30840798', 'tt30253514', 'tt31193180', 'tt20969586', 'tt32299316', 'tt8115900']
@@ -66,10 +68,6 @@ export default function Genres() {
         }
     }
     function setInactive() {
-        const movieBoxes = document.querySelectorAll(".selected")
-        movieBoxes.forEach((movie) => {
-        movie.classList.remove('selected')
-        })
         setActiveIndexGenrePair(null)
     }
 
@@ -97,7 +95,7 @@ export default function Genres() {
                 {genre}
             </div>
         ))}
-        <div className="genrebutton" onClick={() => goToTop()}>Top</div>
+        <div className="genrebutton" onClick={goToTop}>Top</div>
         </div>
         {genres.map((genre) => {
             const genreMovies = movies.filter((movie) =>
@@ -111,11 +109,22 @@ export default function Genres() {
                     <p>{genre}</p>
                     <ul className="movieList" id="movieList">
                         {genreMovies.map((movie, index) => (
-                            <li key={index} onClick={() => movieBoxisActive(genre, index)}>
+                            <li key={index}
+                                onClick={() => {
+                                    if (!activeIndexGenrePair || (activeIndexGenrePair.gnr !== genre && activeIndexGenrePair.idx !== index)) {
+                                        movieBoxisActive(genre, index);
+                                    }
+                                }}
+                                className={(activeIndexGenrePair && activeIndexGenrePair.gnr === genre && activeIndexGenrePair.idx === index) ? 'selected' : ''}>
                                 <MovieCard
                                     movie={movie}
-                                    text={(activeIndexGenrePair && activeIndexGenrePair.idx == index && activeIndexGenrePair.gnr == genre) ? 'text' : 'hidden'}
+                                    text={(activeIndexGenrePair && activeIndexGenrePair.gnr == genre && activeIndexGenrePair.idx == index) ? 'text' : 'hidden'}
                                 />
+                                {activeIndexGenrePair && activeIndexGenrePair.gnr == genre && activeIndexGenrePair.idx == index && (
+                                    <div className="xBtn" onClick={setInactive}>
+                                        <FontAwesomeIcon icon={faX} />
+                                    </div>
+                                )}
                             </li>
                         ))}
                         <div id="overlay" onClick={setInactive}></div>
