@@ -27,7 +27,7 @@ export default function Home() {
                 director: singleMovie.Director,
                 plot: singleMovie.Plot,
                 poster: singleMovie.Poster,
-                id: singleMovie.id
+                id: singleMovie.ImdbID
             })
             }
             setMovies(out)

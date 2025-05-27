@@ -47,7 +47,7 @@ export default function Genres() {
                     director: singleMovie.Director,
                     plot: singleMovie.Plot,
                     poster: singleMovie.Poster,
-                    id: singleMovie.id
+                    id: singleMovie.ImdbID
                 })
                 setGenres(addUniqueSections(singleMovie.Genre, genres))
             }
