@@ -3,6 +3,9 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import MovieCard from '../components/MovieCard'
 import { Movie } from '../components/MovieCard'
 import "./Recommended.css"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 const movieList: string[] = ['tt11655566', 'tt9603208', 'tt1674782', 'tt32246771', 'tt9619824',
     'tt26743210', 'tt30840798', 'tt30253514', 'tt31193180', 'tt20969586', 'tt32299316', 'tt8115900']
@@ -54,11 +57,11 @@ export default function Recommended() {
     return (
         <>
         <div className="recContainer">
-            <div className="button" onClick={() => goLeft()}>◀️</div>
+            <div className="button" onClick={() => goLeft()}><FontAwesomeIcon icon={faArrowLeft}/></div>
             <div className="card">
                 <MovieCard movie={movie} text="text" />
             </div>
-            <div className="button" onClick={() => goRight()}>▶️</div>
+            <div className="button" onClick={() => goRight()}><FontAwesomeIcon icon={faArrowRight}/></div>
         </div>
         </>
     )
