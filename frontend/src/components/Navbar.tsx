@@ -21,6 +21,7 @@ export default function Navbar() {
                     <NavLink to="genres">Genres</NavLink>
                     <NavLink to="theaters">Theatres</NavLink>
                     <NavLink to="recommended">Recommended</NavLink>
+                    <NavLink to="about">About</NavLink>
                 </div>
                 <div className="warning">
                     This Website is Under Construction, Estimated to be Complete In July 2025
