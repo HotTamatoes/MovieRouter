@@ -2,45 +2,73 @@
     display: none;
 }
 
-/* Image section */
+.director {
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: var(--lighter-color);
+}
+
+.movie-card {
+    display: flex;
+    gap: 1.5em;
+    align-items: flex-start;
+    background: var(--darker-color, #232323);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    max-width: 700px;
+}
+
 .image {
     flex-shrink: 0;
 }
 
 .poster {
-    width: 150px;
-    height: auto;
-    border-radius: 4px;
+    width: 160px;
+    height: 240px;
+    border-radius: 8px;
     object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
-/* Text section */
 .text {
     display: flex;
     flex-direction: column;
+    gap: 0.5em;
+    color: var(--text-color, #fff);
     flex: 1;
-    min-width: 200px;
-    color: var(--text-color);
 }
 
-/* Title and year side by side */
 .yearByTitle {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-size: 1.5rem;
+    gap: 10px;
+    font-size: 1.6rem;
     font-weight: bold;
-    color: var(--text-color);
-    margin-bottom: 10px;
+    margin-bottom: 0.5em;
 }
 
-/* Individual info items */
-.rated,
-.released,
-.genre,
-.director {
-    margin-bottom: 6px;
-    font-size: 0.95rem;
+.info-row {
+    display: flex;
+    gap: 0.5em;
+    font-size: 1rem;
+    margin-bottom: 0.2em;
+}
+
+.label {
+    font-weight: 600;
     color: var(--lighter-color);
+    min-width: 70px;
+}
+
+.value {
+    color: var(--text-color);
+    word-break: break-word;
+}
+
+.plot-row .value {
+    font-style: italic;
+    color: var(--text-color);
+    margin-left: 0.5em;
+    max-width: 400px;
+    line-height: 1.4;
 }
