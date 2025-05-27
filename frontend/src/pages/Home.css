@@ -1,73 +1,73 @@
 #root {
-  margin: 0 auto;
-  text-align: center;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .movieList {
-  width: calc(100vw - 1em);
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  margin-bottom: auto;
-  gap: 1em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  overflow-x: auto;
-  overflow-y: hidden;
+    width: calc(100vw - 1em);
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-bottom: auto;
+    gap: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .movieList li {
-  flex-direction: row;
-  list-style: none;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
-  margin-top: 2em;
-  margin-bottom: 2em;
+    flex-direction: row;
+    list-style: none;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    margin-top: 2em;
+    margin-bottom: 2em;
 }
 .movieList li:hover {
-  scale:110%;
+    scale:110%;
 }
 
 .movieList::after {
-  content: '';
-  padding: 0.1px;
-  margin: auto;
+    content: '';
+    padding: 0.1px;
+    margin: auto;
 }
 .movieList::before {
-  content: '';
-  margin: auto;
+    content: '';
+    margin: auto;
 }
 
 .movieList .selected:hover {
-  scale: 100%;
+    scale: 100%;
 }
 .movieList .selected ~ #overlay {
-  display: block
+    display: block
 }
 
 #overlay{
-  background: rgba(0,0,0,0.6);
-  position: fixed;
-  inset: 0;
-  z-index: 9;
-  display: none;
+    background: rgba(0,0,0,0.6);
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    display: none;
 }
 
 .movieList .selected {
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  top: 50%;
-  left: 50%;
-  padding: 3em;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  background-color: var(--darker-color);
-  align-items: flex-start;
-  gap: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: auto;
-  flex-wrap: wrap;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    top: 50%;
+    left: 50%;
+    padding: 3em;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background-color: var(--darker-color);
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: auto;
+    flex-wrap: wrap;
 }
