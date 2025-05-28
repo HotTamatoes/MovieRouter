@@ -59,14 +59,14 @@ export default function Home() {
     
     return (
     <>
-    <h1>Welcome to Movie-Router.com</h1>
+    <h1>Welcome to Movie-Router.com!</h1>
     <ul className="movieList" id="movieList">
         {movies.map((movie: Movie, index: number) => (
         <li key={index}
             onClick={() => {if (activeIndex !== index){movieBoxisActive(index)}}}
-            className={(activeIndex && activeIndex === index) ? 'selected' : ''}>
-            <MovieCard movie={movie} text={(activeIndex && activeIndex === index) ? 'text' : 'hidden'} />
-            {activeIndex && activeIndex === index && (
+            className={activeIndex === index ? 'selected' : ''}>
+            <MovieCard movie={movie} text={ activeIndex === index ? 'text' : 'hidden'} />
+            {activeIndex === index && (
                 <div className="xBtn" onClick={setInactive}>
                     <FontAwesomeIcon icon={faX} />
                 </div>
