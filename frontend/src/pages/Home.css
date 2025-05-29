@@ -126,5 +126,6 @@
     }
     .movieList .selected {
         padding: 3em;
+        top: 50%;
     }
 }
