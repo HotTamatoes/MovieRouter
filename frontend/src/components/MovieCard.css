@@ -33,6 +33,7 @@
     width: 45%;
     flex-direction: column;
     overflow: hidden;
+    display: flex;
 }
 
 .poster {
