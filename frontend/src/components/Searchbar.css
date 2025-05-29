@@ -6,6 +6,7 @@
     display: flex;
     width: 100%;
     align-items: center;
+    z-index:9;
 }
 
 .searchbox .icon {

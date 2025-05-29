@@ -8,10 +8,17 @@ export default function Search() {
     const location = useLocation();
     const [movie, setMovie] = useState<Movie>()
     const [loading, setLoading] = useState(true)
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
     
     const queryParams = new URLSearchParams(location.search);
     const query = queryParams.get('q'); // The 'q' is the name of the query parameter
 
+
+    useEffect(() => {
+        const handleResize = () => setIsSmallScreen(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (!query) {
@@ -66,7 +73,7 @@ export default function Search() {
 
     return (
         <>
-            <Searchbar showSearch={true}/>
+            <Searchbar showSearch={isSmallScreen}/>
             <div className="card">
                 <MovieCard movie={movie} text="text" />
             </div>
