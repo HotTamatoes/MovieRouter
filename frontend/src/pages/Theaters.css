@@ -1,7 +1,7 @@
 .theaterPage{
     display: flex;
-    height: calc(100vh - 4.7em);
-    height: calc(100dvh - 4.7em);
+    height: calc(100vh - 4.625em);
+    height: calc(100dvh - 4.625em);
     width: 100vw;
     width: 100dvw;
 }
@@ -20,8 +20,8 @@
 }
 
 .theaterList {
-    height: calc(100vh - 9.2em);
-    height: calc(100dvh - 9.2em);
+    height: calc(100vh - 9.25em);
+    height: calc(100dvh - 9.25em);
     display: flex;
     flex-direction: column;
     float: top-right;

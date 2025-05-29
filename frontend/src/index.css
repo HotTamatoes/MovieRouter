@@ -27,8 +27,8 @@ body {
   place-items: center;
   min-width: 100vw;
   min-width: 100dvw;
-  min-height: calc(100vh - 6.5em);
-  min-height: calc(100dvh - 6.5em);
+  min-height: calc(100vh - 4.625em);
+  min-height: calc(100dvh - 4.625em);
   overflow: hidden
 }
 
@@ -60,5 +60,6 @@ show {
 @media (min-width: 768px) {
   body {
     padding-top: 6.5em;
+    padding-bottom: unset;
   }
 }

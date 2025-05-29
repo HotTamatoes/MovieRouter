@@ -13,9 +13,15 @@
 }
 
 .card {
-    padding: 3em;
     justify-content: center;
     align-content: center;
     background-color: var(--darker-color);
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+
+@media (min-width: 768px) {
+    .card {
+        padding: 3em;
+    }
 }

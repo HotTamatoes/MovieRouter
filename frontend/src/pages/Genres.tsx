@@ -74,7 +74,7 @@ export default function Genres() {
     }
 
     function movieBoxisActive(genre: string, index: number) {
-        const list = document.querySelector(`#${genre} .movieList`)
+        const list = document.querySelector(`.${genre} .movieList`)
         const movieBoxes = list?.querySelectorAll('li');
         if (movieBoxes && movieBoxes[index]) {
             movieBoxes[index].classList.add('selected')
@@ -127,9 +127,9 @@ export default function Genres() {
             if (genreMovies.length === 0) return null;
 
             return (
-                <div className="genrebox" key={genre} id={genre}>
-                    <p>{genre}</p>
-                    <ul className="movieList" id="movieList">
+                <div className={`genrebox ${genre}`} key={genre}>
+                    <div className="genreTitle">{genre}</div>
+                    <ul className="movieList" id={genre}>
                         {genreMovies.map((movie, index) => (
                             <li key={index}
                                 onClick={() => {
