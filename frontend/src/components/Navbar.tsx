@@ -7,10 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouse, faBook, faMapLocationDot, faCircleCheck, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 export default function Navbar() {
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 900);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
     useEffect(() => {
-        const handleResize = () => setIsSmallScreen(window.innerWidth < 900);
+        const handleResize = () => setIsSmallScreen(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);

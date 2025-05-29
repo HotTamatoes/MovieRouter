@@ -4,7 +4,7 @@ import './Genres.css'
 import MovieCard from '../components/MovieCard';
 import { Movie } from '../components/MovieCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faX, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 const movieList: string[] = ['tt11655566', 'tt9603208', 'tt1674782', 'tt32246771', 'tt9619824',
     'tt26743210', 'tt30840798', 'tt30253514', 'tt31193180', 'tt20969586', 'tt32299316', 'tt8115900']
@@ -34,6 +34,16 @@ export default function Genres() {
     const [movies, setMovies] = useState<Movie[]>([])
     const [genres, setGenres] = useState<string[]>([])
     const [activeIndexGenrePair, setActiveIndexGenrePair] = useState<{idx: number, gnr: string} | null>(null)
+    const [navbarShow, setNavbarShow] = useState(false)
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsSmallScreen(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+
     useEffect(() => {
         const getData = async () => {
             let out: Movie[] = []
@@ -58,6 +68,10 @@ export default function Genres() {
         getData()
         setLoading(false)
     }, []);
+
+    function toggleGenreNav() {
+        setNavbarShow(!navbarShow)
+    }
 
     function movieBoxisActive(genre: string, index: number) {
         const list = document.querySelector(`#${genre} .movieList`)
@@ -89,14 +103,22 @@ export default function Genres() {
 
     return (
         <>
-        <div className="genrenavbar">
-        {genres.map((genre) => (
-            <div className="genrebutton" onClick={() => goToTarget(genre)}>
-                {genre}
+        {isSmallScreen && !navbarShow && 
+            <div className="burger" onClick={toggleGenreNav}><FontAwesomeIcon icon={faBars}/></div>
+        }
+        {(!isSmallScreen || (isSmallScreen && navbarShow)) &&
+            <div className="genrenavbar">
+                {isSmallScreen &&
+                    <div className="genrebutton stower"><FontAwesomeIcon icon={faChevronRight} onClick={toggleGenreNav}/></div>
+                }
+                <div className="genrebutton" onClick={goToTop}>Top</div>
+                {genres.map((genre) => (
+                    <div className="genrebutton" onClick={() => goToTarget(genre)}>
+                        {genre}
+                    </div>
+                ))}
             </div>
-        ))}
-        <div className="genrebutton" onClick={goToTop}>Top</div>
-        </div>
+        }
         {genres.map((genre) => {
             const genreMovies = movies.filter((movie) =>
                 movie.genre.split(',').map(s => s.trim()).includes(genre)

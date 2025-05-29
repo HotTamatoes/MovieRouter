@@ -2,12 +2,31 @@ body {
     overflow-y: auto;
 }
 
+.stower {
+    position: fixed;
+    top:0;
+}
+
 .genrenavbar {
-    flex-direction: row;
-    float: top-left;
-    position: sticky;
+    display: flex;
+    flex-direction: column;
+    right: 0;
+    position: fixed;
     top: 0;
-    z-index:8
+    z-index:8;
+    overflow-y: auto;
+    height: calc(100vh - 4.6em);
+    height: calc(100dvh - 4.6em);
+}
+
+.burger {
+    position: fixed;
+    top: 0;
+    right: 0.5em;
+    cursor: pointer;
+    font-size: 3em;
+    float: right;
+    z-index: 8;
 }
 
 .genrebutton {
@@ -26,4 +45,12 @@ body {
 }
 .genrebutton:focus, .genrebutton:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (min-width: 768px) {
+    .genrenavbar {
+        position: sticky;
+        flex-direction: row;
+        height: unset;
+    }
 }
