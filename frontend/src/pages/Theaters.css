@@ -1,8 +1,9 @@
 .theaterPage{
     display: flex;
-    height: calc(100vh - 6.5em);
-    height: calc(100dvh - 6.5em);
+    height: calc(100vh - 4.7em);
+    height: calc(100dvh - 4.7em);
     width: 100vw;
+    width: 100dvw;
 }
 
 .googleMap{
@@ -19,8 +20,8 @@
 }
 
 .theaterList {
-    height: calc(100vh - 12em);
-    height: calc(100dvh - 12em);
+    height: calc(100vh - 9.2em);
+    height: calc(100dvh - 9.2em);
     display: flex;
     flex-direction: column;
     float: top-right;
@@ -69,35 +70,13 @@
     padding-bottom: 0.3em;
 }
 
-@media screen and (max-width: 60.4em) {
-    .theaterPage {
-        height: calc(100vh - 8.5em);
-        height: calc(100dvh - 8.5em);
+@media (min-width: 768px) {
+    .theaterPage{
+        height: calc(100vh - 6.5em);
+        height: calc(100dvh - 6.5em);
     }
     .theaterList {
-        height: calc(100vh - 14em);
-        height: calc(100dvh - 14em);
-    }
-}
-@media screen and (max-width: 55em) {
-    .theaterPage {
-        height: calc(100vh - 11.8em);
-        height: calc(100dvh - 11.8em);
-    }
-    .theaterList {
-        height: calc(100vh - 17em);
-        height: calc(100dvh - 17em);
-    }
-}
-@media screen and (max-width: 44.72em) {
-    .theaterList {
-        height: calc(100vh - 18.5em);
-        height: calc(100dvh - 18.5em);
-    }
-}
-@media screen and (max-width: 30.62em) {
-    .theaterList {
-        height: calc(100vh - 20em);
-        height: calc(100dvh - 20em);
+        height: calc(100vh - 11.1em);
+        height: calc(100dvh - 11.1em);
     }
 }

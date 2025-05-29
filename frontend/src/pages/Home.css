@@ -38,11 +38,28 @@
     margin: auto;
 }
 
+.movieList li .movieCard {
+    min-width: 20em;
+}
+.movieList li .movieCard #overlay {
+    display: none;
+}
+.movieList li .image {
+    width: 100%;
+}
+.movieList li .poster {
+    width: 20em;
+    height: 30em;
+}
+
 .movieList .selected:hover {
     scale: 100%;
 }
 .movieList .selected ~ #overlay {
-    display: block
+    display: block;
+}
+.movieList .selected .movieCard #overlay {
+    display: block;
 }
 .movieList .selected .xBtn {
     position: absolute;
@@ -73,7 +90,32 @@
     gap: 16px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 44em;
     margin: auto;
     flex-wrap: wrap;
+}
+
+.movieList .selected .image {
+    width: 45%;
+}
+.movieList .selected .poster {
+    width: 100%;
+    height: auto;
+}
+
+.homeWarning {
+    background-color: #bb0000;
+    align-content: center;
+    justify-content: center;
+    margin: 1.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+@media (min-width: 768px) {
+    .homeWarning {
+        display: none;
+    }
+    .movieList .selected .movieCard #overlay {
+        display: none;
+    }
 }

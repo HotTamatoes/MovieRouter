@@ -8,23 +8,30 @@
     color: var(--lighter-color);
 }
 
-.movie-card {
+.movieCard {
     display: flex;
+    position: relative;
     gap: 1.5em;
     align-items: flex-start;
     background: var(--darker-color, #232323);
     border-radius: 10px;
     max-width: 700px;
-    margin: auto;
+    height: auto;
+}
+.movieCard #overlay{
+    background: rgba(0,0,0,0.7);
+    position: absolute;
+    display: block;
+}
+.image .selected ~ #overlay {
+    display: none;
 }
 
 .image {
-    flex-shrink: 0;
-    display: flex;
     align-items: center;
     justify-content: center;
-    height: 30em;
-    width: 20em;
+    width: 45%;
+    flex-direction: column;
     overflow: hidden;
 }
 
@@ -32,16 +39,19 @@
     border-radius: 8px;
     object-fit: cover;
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    height: 30em;
-    width: auto;
+    height: auto;
+    width: 100%;
+    z-index: 0;
 }
 
 .text {
     display: flex;
+    position: relative;
     flex-direction: column;
     gap: 0.5em;
-    color: var(--text-color, #fff);
-    flex: 1;
+    color: var(--text-color);
+    justify-content: left;
+    margin: auto;
 }
 
 .yearByTitle {
@@ -50,14 +60,20 @@
     gap: 10px;
     font-size: 1.6rem;
     font-weight: bold;
+    margin: auto;
     margin-bottom: 0.5em;
+    z-index: 10;
 }
 
 .info-row {
     display: flex;
     gap: 0.5em;
     font-size: 1rem;
+    margin-left: 0.5em;
     margin-bottom: 0.2em;
+    flex-direction: row;
+    text-align: left;
+    z-index: 10;
 }
 
 .label {
@@ -74,7 +90,12 @@
 .plot-row .value {
     font-style: italic;
     color: var(--text-color);
-    margin-left: 0.5em;
     max-width: 400px;
     line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+    .movieCard #overlay {
+        display: none;
+    }
 }

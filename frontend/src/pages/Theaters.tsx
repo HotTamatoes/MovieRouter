@@ -126,6 +126,8 @@ export default function Theaters() {
         markers = []
         lastMarker = null
         const herePin = new google.maps.marker.PinElement({
+            background: 'blue',
+            borderColor: 'blue',
             glyph: '😎'
         })
         markers.push(new google.maps.marker.AdvancedMarkerElement({

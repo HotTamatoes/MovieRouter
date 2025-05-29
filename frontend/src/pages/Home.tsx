@@ -60,6 +60,9 @@ export default function Home() {
     return (
     <>
     <h1>Welcome to Movie-Router.com!</h1>
+    <div className="homeWarning">
+        This Website is Under Construction, Estimated to be Complete In July 2025
+    </div>
     <ul className="movieList" id="movieList">
         {movies.map((movie: Movie, index: number) => (
         <li key={index}

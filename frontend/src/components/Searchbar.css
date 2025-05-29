@@ -1,0 +1,40 @@
+.searchbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.searchbox .icon {
+    float: bottom-right;
+    font-size: 2em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    margin: auto;
+}
+
+.searchbox input[type=text] {
+    padding: 0.6em 1.2em;
+    border: 1px solid #696969;
+    font-size: 1em;
+    height: 1.5em;
+    width: 100%;
+}
+
+.searchbox input[type=text]:focus {
+    outline: none;
+}
+
+@media (min-width: 768px) {
+    .searchbox {
+        float: bottom-right;
+        position: unset;
+        display: flex;
+        margin-left: auto;
+        margin-top: auto;
+        width: unset;
+    }
+}
