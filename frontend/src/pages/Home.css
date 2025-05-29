@@ -75,7 +75,7 @@
     position: fixed;
     display: flex;
     flex-direction: row;
-    top: 50%;
+    top: calc(50% - 4.625em/2);
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9;

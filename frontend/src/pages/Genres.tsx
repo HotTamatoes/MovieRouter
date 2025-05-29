@@ -109,7 +109,7 @@ export default function Genres() {
         {(!isSmallScreen || (isSmallScreen && navbarShow)) &&
             <div className="genrenavbar">
                 {isSmallScreen &&
-                    <div className="genrebutton stower"><FontAwesomeIcon icon={faChevronRight} onClick={toggleGenreNav}/></div>
+                    <div className="genrebutton stower" onClick={toggleGenreNav}><FontAwesomeIcon icon={faChevronRight}/></div>
                 }
                 <div className="genrebutton" onClick={goToTop}>Top</div>
                 {genres.map((genre) => (

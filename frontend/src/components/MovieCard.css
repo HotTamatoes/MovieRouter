@@ -17,6 +17,7 @@
     border-radius: 10px;
     max-width: 700px;
     height: auto;
+    max-height: calc(100vh - 4.625em);
 }
 .movieCard #overlay{
     background: rgba(0,0,0,0.7);
