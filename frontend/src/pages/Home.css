@@ -111,11 +111,18 @@
     padding-right: 1em;
 }
 
+.welcome {
+    display: none;
+}
+
 @media (min-width: 768px) {
     .homeWarning {
         display: none;
     }
     .movieList .selected .movieCard #overlay {
         display: none;
+    }
+    .welcome {
+        display: block;
     }
 }

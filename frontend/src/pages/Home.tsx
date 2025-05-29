@@ -59,7 +59,7 @@ export default function Home() {
     
     return (
     <>
-    <h1>Welcome to Movie-Router.com!</h1>
+    <h1 className="welcome">Welcome to Movie-Router.com!</h1>
     <div className="homeWarning">
         This Website is Under Construction, Estimated to be Complete In July 2025
     </div>
