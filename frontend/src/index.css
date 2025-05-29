@@ -61,5 +61,7 @@ show {
   body {
     padding-top: 6.5em;
     padding-bottom: unset;
+    min-height: calc(100vh - 6.5em);
+    min-height: calc(100dvh - 6.5em);
   }
 }

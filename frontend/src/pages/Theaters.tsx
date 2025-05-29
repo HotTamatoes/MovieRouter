@@ -1,6 +1,8 @@
 import './Theaters.css'
 import { useEffect, useState } from "react"
 import LoadingSpinner from "../components/LoadingSpinner"
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 interface Theater {
     name: string
     address: string
@@ -23,19 +25,25 @@ export default function Theaters() {
         lng: 200,
         error: ""
     })
+    const [clickedTheater, setClickedTheater] = useState<string | null>(null)
+    const [expanded, setExpanded] = useState(window.innerWidth > 768)
+
+    function toggleExpanded(){
+        setExpanded(!expanded)
+    }
 
     useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&libraries=marker&v=weekly`;
         script.async = true;
-        script.onload = () => setLoaded(true);
-        document.head.appendChild(script);
+        script.onload = () => setLoaded(true)
+        document.head.appendChild(script)
     }, []);
 
     useEffect(() => {
         function getLocation() {
             if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error);
+            navigator.geolocation.getCurrentPosition(success, error)
             } else {
                 setUserLocation({
                     lat: 100,
@@ -63,8 +71,7 @@ export default function Theaters() {
         error: "Unable to retrieve your location"
         })
     }
-    
-    function theaterClick(name: string) {
+    function theaterClick(name: string, fromMap: boolean) {
         markers.forEach((marker) => {
             const viewedPin = new google.maps.marker.PinElement({
                 background: 'orange',
@@ -78,10 +85,21 @@ export default function Theaters() {
                 }
                 marker.content = viewedPin.element
                 lastMarker = marker
+                if(!fromMap) {
+                    if(marker.position) {
+                        const lat = typeof marker.position.lat === 'function' ? marker.position.lat() : marker.position.lat;
+                        const lng = typeof marker.position.lng === 'function' ? marker.position.lng() : marker.position.lng;
+                        map.panTo(new google.maps.LatLng(lat, lng))
+                    }
+                }
             }
-        });
+        })
+        setClickedTheater(name)
+        if (fromMap) {
+            const target = document.getElementById(name)
+            target?.scrollIntoView({behavior:"instant", block:"center"})
+        }
     }
-
     useEffect(() => {
         const getData = async () => {
             const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/theaterlist?location=${userLocation.lat},${userLocation.lng}`)
@@ -99,8 +117,9 @@ export default function Theaters() {
             }
             setTheaters(out)
         }
-        getData()
-        return
+        if(userLocation.lat != 100){
+            getData()
+        }
     }, [userLocation])
 
     let theaterData: Theater[] = []
@@ -112,11 +131,11 @@ export default function Theaters() {
     }
 
     useEffect(() => {
-        if (!loaded) return;
-        if (userLocation.lat == 100) return;
+        if (!loaded) return
+        if (userLocation.lat == 100) return
         const element = document.getElementById('map')
-        if (element == null) return;
-        if (theaters.length == 0) return;
+        if (element == null) return
+        if (theaters.length == 0) return
 
         map = new google.maps.Map(element, {
             center: { lat: userLocation.lat, lng: userLocation.lng },
@@ -137,16 +156,18 @@ export default function Theaters() {
             content: herePin.element
         }));
         [...theaterData].reverse().forEach((theater: Theater) => {
-            markers.push(new google.maps.marker.AdvancedMarkerElement({
+            const marker = new google.maps.marker.AdvancedMarkerElement({
                 map,
                 position: { lat: Number(theater.lat), lng: Number(theater.lng) },
                 title: theater.name,
                 content: new google.maps.marker.PinElement({
                     glyph: '📽️',
                 }).element
-            }));
-        });
-    }, [loaded, userLocation, theaters]);
+            })
+            marker.addListener('gmp-click', () => theaterClick(theater.name, true))
+            markers.push(marker)
+        })
+    }, [loaded, userLocation, theaters])
 
     if(theaters.length == 0 && userLocation.error == "") {
         return <LoadingSpinner />
@@ -158,14 +179,18 @@ export default function Theaters() {
     return (
     <>
         <div className="theaterPage">
-            <div className="googleMap" id='map'>
+            <div className={expanded ? "googleMap" : "googleMap mapExpanded"} id='map'>
             {!loaded && <p>Loading map</p>}
             </div>
-            <div className="listing">
+            <div className={expanded ? "listing listingExpanded" : "listing"}>
                 {userLocation.lat != 100 &&
                     <div>
-                        <div className="results">
-                            <p >Number of Theaters:</p>
+                        <div className="theaterDropdown">
+                            <div className="chevron" onClick={toggleExpanded}>
+                                {!expanded && <FontAwesomeIcon icon={faChevronLeft}/>}
+                                {expanded && <FontAwesomeIcon icon={faChevronRight}/>}
+                            </div>
+                            <div className="rText">Number of Theaters:</div>
                             <select id='theater-count' value={theaterCount} onChange={(e) => setTheaterCount(e.target.value)}>
                                 <option value='1'>1</option>
                                 <option value='2'>2</option>
@@ -177,8 +202,8 @@ export default function Theaters() {
                         </div>
                         <ul className="theaterList" >
                             {theaterData.map((theater: Theater, index: number) => (
-                                <li key={index} onClick={() => theaterClick(theater.name)}>
-                                    <div className="box">
+                                <li key={index} onClick={() => theaterClick(theater.name, false)} id={theater.name}>
+                                    <div className={(theater.name === clickedTheater)? "box selected" : "box"}>
                                         <div className="title">{theater.name}</div>
                                         <div className="address">{theater.address}</div>
                                         <div className="rating">{theater.rating}⭐ with {theater.rating_count} Ratings</div>

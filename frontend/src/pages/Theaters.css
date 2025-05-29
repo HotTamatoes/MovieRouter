@@ -7,16 +7,30 @@
 }
 
 .googleMap{
-    width:70%;
+    width: 75%;
     height: 100%;
+    transition: width 0.25s ease-in-out;
 }
 
 .listing {
-    width:25%;
     flex: 1;
     float: top-left;
     margin-bottom: auto;
     margin-right: auto;
+    position: fixed;
+    width: 25%;
+    right: calc(-25% + 2.5em);
+    transition: right 0.25s ease-in-out;
+}
+
+.mapExpanded {
+    width: calc(100% - 2.5em);
+    transition: width 0.25s ease-in-out;
+}
+
+.listingExpanded {
+    right: 0;
+    transition: right 0.25s ease-in-out;
 }
 
 .theaterList {
@@ -33,7 +47,7 @@
     overflow-y: auto;
 }
 
-.theaterList li {
+.box {
     flex-direction: row;
     text-align: left;
     list-style: none;
@@ -52,22 +66,41 @@
     font-style: italic;
 }
 
-.theaterList li:hover {
-    background-color: #888888;
+.selected {
+    border: var(--button-hover);
+    background-color: var(--lightest-color);
 }
 
-.results {
+.box:hover {
+    background-color: var(--hover-color);
+}
+
+.theaterDropdown {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    place-content: center;
     gap: 1em;
+    width: 100%;
 }
 
-.results select {
-    margin-top: auto;
-    margin-bottom: auto;
+.theaterDropdown select {
+    margin: auto;
     padding-top: 0.3em;
     padding-bottom: 0.3em;
+    margin-left: 0;
+}
+
+.rText{
+    margin: auto;
+    margin-right: 0;
+    display: none;
+}
+
+.chevron {
+    cursor: pointer;
+    float: left;
+    padding-left: 0.2em;
+    font-size: 3em;
 }
 
 @media (min-width: 768px) {
@@ -76,7 +109,10 @@
         height: calc(100dvh - 6.5em);
     }
     .theaterList {
-        height: calc(100vh - 11.1em);
-        height: calc(100dvh - 11.1em);
+        height: calc(100vh - 12em);
+        height: calc(100dvh - 12em);
+    }
+    .rText {
+        display: flex;
     }
 }
