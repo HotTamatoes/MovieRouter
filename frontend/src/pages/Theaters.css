@@ -7,7 +7,7 @@
 }
 
 .googleMap{
-    width: 75%;
+    width: calc(100% - 2.5em);
     height: 100%;
     transition: width 0.25s ease-in-out;
 }
@@ -18,14 +18,10 @@
     margin-bottom: auto;
     margin-right: auto;
     position: fixed;
-    width: 25%;
-    right: calc(-25% + 2.5em);
+    width: 75%;
+    right: calc(-75% + 2.5em);
+    background-color: var(--primary-color);
     transition: right 0.25s ease-in-out;
-}
-
-.mapExpanded {
-    width: calc(100% - 2.5em);
-    transition: width 0.25s ease-in-out;
 }
 
 .listingExpanded {
@@ -115,4 +111,18 @@
     .rText {
         display: flex;
     }
+    .googleMap{
+        width: 75%;
+    }
+    .listing {
+        width: 25%;
+        right: calc(-25% + 2.5em);
+    }
+    .mapExpanded {
+        width: calc(100% - 2.5em);
+    }
+    .listingExpanded {
+        right: 0;
+    }
+
 }
