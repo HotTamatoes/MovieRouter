@@ -47,10 +47,13 @@ h1 {
 
 @media (prefers-color-scheme: light) {
   :root {
-    --text-color: #213547;
-    --primary-color: #ffffff;
-    --hover-color: #ddd;
-    --button-color: #f9f9f9;
+    --text-color: #000000;
+    --primary-color: #dddddd;
+    --darker-color: #ffffff;
+    --lighter-color: #999999;
+    --lightest-color: #555555;
+    --hover-color: #bbbbbb;
+    --button-hover: #646cff;
   }
 }
 
