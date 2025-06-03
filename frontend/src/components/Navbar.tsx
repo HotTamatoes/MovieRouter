@@ -29,7 +29,7 @@ export default function Navbar() {
                 <div className="navbarText">
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="genres">Genres</NavLink>
-                    <NavLink to="theaters">Theatres</NavLink>
+                    <NavLink to="theaters">Theaters</NavLink>
                     <NavLink to="recommended">Recommended</NavLink>
                     <NavLink to="about">About</NavLink>
                 </div>
