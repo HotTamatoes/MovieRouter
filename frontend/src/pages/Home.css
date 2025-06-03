@@ -58,8 +58,9 @@
 }
 .movieList .selected .xBtn {
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: 0.1em;
+    right: 0.5em;
+    font-size: 2em;
     z-index: 9;
     cursor: pointer;
 }
