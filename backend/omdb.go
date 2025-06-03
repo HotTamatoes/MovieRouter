@@ -19,19 +19,37 @@ type Movie struct {
 	ImdbID   string `json:"ImdbID"`
 }
 
-func omdbSingle(w http.ResponseWriter, r *http.Request) {
+func omdbDefault(w http.ResponseWriter) {
+	movieList := [12]string{"tt11655566", "tt9603208", "tt1674782", "tt32246771", "tt9619824",
+		"tt26743210", "tt30840798", "tt30253514", "tt31193180", "tt20969586", "tt32299316", "tt8115900"}
+
+	var movies [len(movieList)]Movie
+	for index, movieIMDB := range movieList {
+		movies[index] = getOmdbSingle("", movieIMDB)
+	}
+	json.NewEncoder(w).Encode(movies)
+}
+
+func omdbHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	movieTitle := r.URL.Query().Get("title")
 	movieIMDB := r.URL.Query().Get("id")
-	if movieTitle == "" && movieIMDB == "" {
-		http.Error(w, "Both Movie Title and ID were not Provided", http.StatusBadRequest)
-		return
-	} else if movieTitle != "" && movieIMDB != "" {
+	if movieTitle != "" && movieIMDB != "" {
 		http.Error(w, "Both Movie Title and ID were Provided", http.StatusBadRequest)
 		return
+	} else if movieTitle == "" && movieIMDB == "" {
+		omdbDefault(w)
+		return
+	} else if movieTitle != "" || movieIMDB[:2] == "tt" {
+		json.NewEncoder(w).Encode(getOmdbSingle(movieTitle, movieIMDB))
+		return
 	}
+	http.Error(w, "Title was not provided and IMDB ID is not valid", http.StatusBadRequest)
+}
+
+func getOmdbSingle(movieTitle string, movieIMDB string) Movie {
 	var movie Movie
 	if movieTitle == "" {
 		movie = getMovieSQLId(movieIMDB)
@@ -39,9 +57,7 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) {
 		movie = getMovieSQLTitle(movieTitle)
 	}
 	if movie.Poster != "" {
-		fmt.Println("got " + movie.Title + " from database")
-		json.NewEncoder(w).Encode(movie)
-		return
+		return movie
 	}
 
 	var req *http.Request
@@ -64,11 +80,7 @@ func omdbSingle(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 	fmt.Println("Web has been requested for Movie titled: " + movieTitle + " / With ID: " + movieIMDB)
 
-	err2 := json.NewDecoder(resp.Body).Decode(&movie)
-	if err2 != nil {
-		http.Error(w, err2.Error(), http.StatusBadRequest)
-		return
-	}
+	json.NewDecoder(resp.Body).Decode(&movie)
 	putMovieSQL(movie)
-	json.NewEncoder(w).Encode(movie)
+	return movie
 }

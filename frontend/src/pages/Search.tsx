@@ -1,68 +1,46 @@
-import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
-import MovieCard, { Movie } from "../components/MovieCard";
-import Searchbar from "../components/Searchbar";
+import { useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Searchbar from '../components/Searchbar'
+import MovieCard, { Movie } from '../components/MovieCard';
+import { fetcher } from './Home'
+import useSWR from 'swr'
 
 export default function Search() {
     const location = useLocation();
-    const [movie, setMovie] = useState<Movie>()
-    const [loading, setLoading] = useState(true)
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-    
-    const queryParams = new URLSearchParams(location.search);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768)
+    useEffect(() => {
+        const handleResize = () => setIsSmallScreen(window.innerWidth < 768)
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
+    const queryParams = new URLSearchParams(location.search)
     const query = queryParams.get('q'); // The 'q' is the name of the query parameter
-
-
-    useEffect(() => {
-        const handleResize = () => setIsSmallScreen(window.innerWidth < 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
-        if (!query) {
-            return
-        }
-        const getData = async () => {
-            const res = await fetch(url)
-            const singleMovie = await res.json()
-            setMovie({
-                title: singleMovie.Title,
-                year: singleMovie.Year,
-                rated: singleMovie.Rated,
-                released: singleMovie.Released,
-                genre: singleMovie.Genre,
-                director: singleMovie.Director,
-                plot: singleMovie.Plot,
-                poster: singleMovie.Poster,
-                id: singleMovie.ImdbID
-            })
-        }
-        getData()
-        setLoading(false)
-    }, [query]);
-
-    let url: string
-    if(!query) {
-        return (<Searchbar showSearch={true}/>)
-    }
-    if(query.length > 5 && query.length <= 10 &&
-        query.substring(0,2) == "tt" && !Number.isNaN(Number(query.substring(2)))){
+    let url: string | null = null
+    if(query && query.length > 5 && query.length <= 10 &&
+        query.substring(0,2) == 'tt' && !Number.isNaN(Number(query.substring(2)))){
         url = `${import.meta.env.VITE_GOSERVER}/api/omdb?id=${query}`
-    } else {
+    } else if (query) {
         url = `${import.meta.env.VITE_GOSERVER}/api/omdb?title=${query}`
     }
-    
-    if(loading) {
-        return (<LoadingSpinner />)
+    const { data, error, isLoading } = useSWR<Movie>(
+        url,
+        fetcher
+    )
+
+    if(!query) return (<Searchbar showSearch={true}/>)
+    if(error) return (<div>Error loading movies: {error.message}</div>)
+    if(isLoading) return (<LoadingSpinner />)
+    if (!data) {
+    return (
+        <>
+            <Searchbar showSearch={true}/>
+            <div>No Movie Found</div>
+        </>)
     }
 
-    if (!movie) {
-        return (<></>)
-    }
-
-    if(movie.poster == "") {
+    if(data.Poster == '') {
         return (
         <>
             <Searchbar showSearch={true}/>
@@ -75,7 +53,7 @@ export default function Search() {
         <>
             <Searchbar showSearch={isSmallScreen}/>
             <div className="card">
-                <MovieCard movie={movie} text="text" />
+                <MovieCard movie={data} text="text" />
             </div>
         </>
     )

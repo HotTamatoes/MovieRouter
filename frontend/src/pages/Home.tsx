@@ -1,42 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './Home.css'
 import LoadingSpinner from '../components/LoadingSpinner'
-import MovieCard from '../components/MovieCard';
-import { Movie } from '../components/MovieCard';
+import MovieCard, { Movie } from '../components/MovieCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX } from '@fortawesome/free-solid-svg-icons';
-
-const movieList: string[] = ['tt11655566', 'tt9603208', 'tt1674782', 'tt32246771', 'tt9619824',
-    'tt26743210', 'tt30840798', 'tt30253514', 'tt31193180', 'tt20969586', 'tt32299316', 'tt8115900']
+import useSWR from 'swr'
+    
+export const fetcher = (url: string) =>
+    fetch(url).then((res) => {
+    if (!res.ok) {
+        throw new Error('Failed to fetch');
+    }
+    return res.json();
+});
 
 export default function Home() {
-    const [loading, setLoading] = useState(true)
-    const [movies, setMovies] = useState<Movie[]>([])
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
+    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/api/omdb`, fetcher)
 
-    useEffect(() => {
-        const getData = async () => {
-            let out: Movie[] = []
-            for (let movie of movieList) {
-            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/omdb?id=${movie}`)
-            const singleMovie = await res.json()
-            out.push({
-                title: singleMovie.Title,
-                year: singleMovie.Year,
-                rated: singleMovie.Rated,
-                released: singleMovie.Released,
-                genre: singleMovie.Genre,
-                director: singleMovie.Director,
-                plot: singleMovie.Plot,
-                poster: singleMovie.Poster,
-                id: singleMovie.ImdbID
-            })
-            }
-            setMovies(out)
-        }
-        getData()
-        setLoading(false)
-    }, []);
 
     function movieBoxisActive(index: number) {
         setActiveIndex(index)
@@ -53,9 +34,9 @@ export default function Home() {
         ;})
     ;}
 
-    if(loading){
-        return <LoadingSpinner />
-    }
+    if(error) return (<div>Error loading movies: {error.message}</div>)
+    if(isLoading) return (<LoadingSpinner />)
+    if(!data || data.length === 0) return (<div>No Movies Found</div>)
     
     return (
     <>
@@ -64,7 +45,7 @@ export default function Home() {
         This Website is Under Construction, Estimated to be Complete In July 2025
     </div>
     <ul className="movieList" id="movieList">
-        {movies.map((movie: Movie, index: number) => (
+        {data.map((movie: Movie, index: number) => (
         <li key={index}
             onClick={() => {if (activeIndex !== index){movieBoxisActive(index)}}}
             className={activeIndex === index ? 'selected' : ''}>

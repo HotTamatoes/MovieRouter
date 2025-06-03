@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import './Genres.css'
-import MovieCard from '../components/MovieCard';
-import { Movie } from '../components/MovieCard';
+import MovieCard, { Movie } from '../components/MovieCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-
-const movieList: string[] = ['tt11655566', 'tt9603208', 'tt1674782', 'tt32246771', 'tt9619824',
-    'tt26743210', 'tt30840798', 'tt30253514', 'tt31193180', 'tt20969586', 'tt32299316', 'tt8115900']
+import { fetcher } from './Home'
+import useSWR from 'swr'
 
 function addUniqueSections(input: string, existingGenres: string[]): string[] {
     const genres = input.split(',').map(s => s.trim())
@@ -30,12 +28,11 @@ function goToTop() {
 }
 
 export default function Genres() {
-    const [loading, setLoading] = useState(true)
-    const [movies, setMovies] = useState<Movie[]>([])
     const [genres, setGenres] = useState<string[]>([])
     const [activeIndexGenrePair, setActiveIndexGenrePair] = useState<{idx: number, gnr: string} | null>(null)
     const [navbarShow, setNavbarShow] = useState(false)
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/api/omdb`, fetcher)
 
     useEffect(() => {
         const handleResize = () => setIsSmallScreen(window.innerWidth < 768);
@@ -45,29 +42,13 @@ export default function Genres() {
 
 
     useEffect(() => {
-        const getData = async () => {
-            let out: Movie[] = []
-            for (let movie of movieList) {
-                const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/omdb?id=${movie}`)
-                const singleMovie = await res.json()
-                out.push({
-                    title: singleMovie.Title,
-                    year: singleMovie.Year,
-                    rated: singleMovie.Rated,
-                    released: singleMovie.Released,
-                    genre: singleMovie.Genre,
-                    director: singleMovie.Director,
-                    plot: singleMovie.Plot,
-                    poster: singleMovie.Poster,
-                    id: singleMovie.ImdbID
-                })
-                setGenres(addUniqueSections(singleMovie.Genre, genres))
-            }
-            setMovies(out)
-        }
-        getData()
-        setLoading(false)
-    }, []);
+        if (!data) return;
+        let out: string[] = []
+        data.forEach((movie) => {
+            addUniqueSections(movie.Genre, out)
+        })
+        setGenres(out)
+    }, [data]);
 
     function toggleGenreNav() {
         setNavbarShow(!navbarShow)
@@ -95,11 +76,11 @@ export default function Genres() {
                 ;})
             }
         ;})
-    }, [movies])
+    }, [data])
 
-    if(loading){
-        return <LoadingSpinner />
-    }
+    if(error) return (<div>Error loading movies: {error.message}</div>)
+    if(isLoading) return (<LoadingSpinner />)
+    if(!data || data.length === 0) return (<div>No Movies Found</div>)
 
     return (
         <>
@@ -120,8 +101,8 @@ export default function Genres() {
             </div>
         }
         {genres.map((genre) => {
-            const genreMovies = movies.filter((movie) =>
-                movie.genre.split(',').map(s => s.trim()).includes(genre)
+            const genreMovies = data.filter((movie) =>
+                movie.Genre.split(',').map(s => s.trim()).includes(genre)
             );
 
             if (genreMovies.length === 0) return null;

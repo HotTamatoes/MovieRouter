@@ -45,7 +45,7 @@ func main() {
 	router.HandleFunc("/api/movieinfo", getMovieInfo).Methods("GET")
 	router.HandleFunc("/api/test", test).Methods("GET")
 	router.HandleFunc("/api/testjson", testJson).Methods("GET")
-	router.HandleFunc("/api/omdb", omdbSingle).Methods("GET")
+	router.HandleFunc("/api/omdb", omdbHandler).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(secrets.Port, router))
 }
