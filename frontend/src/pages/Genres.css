@@ -56,5 +56,6 @@ body {
         position: sticky;
         flex-direction: row;
         height: unset;
+        flex-wrap: wrap;
     }
 }
