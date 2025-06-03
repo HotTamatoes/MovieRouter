@@ -170,10 +170,13 @@ export default function Theaters() {
     }, [loaded, userLocation, theaters])
 
     if(theaters.length == 0 && userLocation.error == "") {
-        return <LoadingSpinner />
+        return (<>
+            <h1>This page needs your location to load</h1>
+            <LoadingSpinner />
+        </>)
     }
     if(userLocation.error != ""){
-        return <p>Error: {userLocation.error}</p>
+        return (<p>Error: {userLocation.error}</p>)
     }
 
     return (
