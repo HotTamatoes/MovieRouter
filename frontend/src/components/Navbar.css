@@ -94,10 +94,14 @@
 
 @media (min-width: 768px) {
     .warning {
-        display: flex;
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .logobox{
         display: flex;
+        white-space: nowrap;
     }
     .navbarIcon {
         display: none;
