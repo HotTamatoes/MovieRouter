@@ -33,6 +33,7 @@ func omdbDefault(w http.ResponseWriter) {
 func omdbHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Cache-Control", "max-age=3600")
 
 	movieTitle := r.URL.Query().Get("title")
 	movieIMDB := r.URL.Query().Get("id")
