@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { useState, useEffect } from "react"
+import LoadingSpinner from "../components/LoadingSpinner"
 import './Genres.css'
-import MovieCard, { Movie } from '../components/MovieCard';
+import MovieCard, { Movie } from '../components/MovieCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faX, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faX, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { fetcher } from './Home'
 import useSWR from 'swr'
 
@@ -23,8 +23,8 @@ function goToTarget(id: string){
 }
 
 function goToTop() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
 }
 
 export default function Genres() {
@@ -35,20 +35,19 @@ export default function Genres() {
     const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/api/omdb`, fetcher)
 
     useEffect(() => {
-        const handleResize = () => setIsSmallScreen(window.innerWidth < 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
+        const handleResize = () => setIsSmallScreen(window.innerWidth < 768)
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
 
     useEffect(() => {
-        if (!data) return;
+        if (!data) return
         let out: string[] = []
         data.forEach((movie) => {
             addUniqueSections(movie.Genre, out)
         })
         setGenres(out)
-    }, [data]);
+    }, [data])
 
     function toggleGenreNav() {
         setNavbarShow(!navbarShow)
@@ -67,16 +66,26 @@ export default function Genres() {
     }
 
     useEffect(() => {
-        const scrollContainers = document.querySelectorAll(".movieList") as NodeListOf<HTMLElement>;
+        const scrollContainers = document.querySelectorAll<HTMLElement>('.movieList')
+        const handlers: { el: HTMLElement, fn: (evt: WheelEvent) => void }[] = []
+
         scrollContainers.forEach((scrollContainer) => {
-            if(scrollContainer.scrollWidth > scrollContainer.clientWidth) {
-                scrollContainer.addEventListener("wheel", (evt) => {
-                    evt.preventDefault();
-                    scrollContainer.scrollLeft += (evt.deltaY/2)
-                ;})
+            if (scrollContainer.scrollWidth > scrollContainer.clientWidth) {
+                const action = (evt: WheelEvent) => {
+                    evt.preventDefault()
+                    scrollContainer.scrollLeft += 1.5 * evt.deltaY
+                }
+                scrollContainer.addEventListener('wheel', action, { passive: false })
+                handlers.push({ el: scrollContainer, fn: action })
             }
-        ;})
-    }, [data])
+        })
+
+        return () => {
+            handlers.forEach(({ el, fn }) => {
+                el.removeEventListener('wheel', fn)
+            })
+        }
+    }, [genres])
 
     if(error) return (<div>Error loading movies: {error.message}</div>)
     if(isLoading) return (<LoadingSpinner />)
@@ -103,9 +112,9 @@ export default function Genres() {
         {genres.map((genre) => {
             const genreMovies = data.filter((movie) =>
                 movie.Genre.split(',').map(s => s.trim()).includes(genre)
-            );
+            )
 
-            if (genreMovies.length === 0) return null;
+            if (genreMovies.length === 0) return null
 
             return (
                 <div className={`genrebox ${genre}`} key={genre}>
@@ -133,7 +142,7 @@ export default function Genres() {
                         <div id="overlay" onClick={setInactive}></div>
                     </ul>
                 </div>
-            );
+            )
         })}
         </>
     )
