@@ -63,7 +63,7 @@ export default function MovieCard({ movie, text }: MovieCardProp) {
                     <span className="value">{movie.Director}</span>
                 </div>
                 <div className="info-row">
-                    <span className="label">ID:</span>
+                    <span className="label">IMDB ID:</span>
                     <span className="value">{movie.ImdbID}</span>
                 </div>
                 <div className={"info-row plot-row"}>
