@@ -47,5 +47,5 @@ func main() {
 	router.HandleFunc("/api/testjson", testJson).Methods("GET")
 	router.HandleFunc("/api/omdb", omdbHandler).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(secrets.Port, router))
+	log.Fatal(http.ListenAndServe(":"+secrets.Port, router))
 }
