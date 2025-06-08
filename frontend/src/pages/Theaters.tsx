@@ -105,7 +105,7 @@ export default function Theaters() {
             const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/theaterlist?lat=${userLocation.lat}&lng=${userLocation.lng}`)
             const resJson = await res.json()
             let out: Theater[] = []
-            for (const theater of resJson.results) {
+            for (const theater of resJson.places) {
                 out.push({
                     name: theater.displayName,
                     address: theater.formattedAddress,

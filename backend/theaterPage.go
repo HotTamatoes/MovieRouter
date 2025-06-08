@@ -29,7 +29,7 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Cache-Control", "max-age=3600")
 	var theaters struct {
-		Results []Theater `json:"places"`
+		Places []Theater `json:"places"`
 	}
 	fmt.Println("Starting movie info search with location: " + r.URL.Query().Get("location"))
 
