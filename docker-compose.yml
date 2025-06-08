@@ -1,0 +1,21 @@
+services:
+  server:
+    build: .
+    container_name: go-server
+    ports:
+      - ${GO_PORT}:8080
+    environment:
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=goserveruser
+      - POSTGRES_PASSWORD=goserverpass
+      - POSTGRES_DB=mrdb
+    volumes:
+      - ./backend/initPostgres.sql:/docker-entrypoint-initdb.d
+    restart: always
