@@ -1,6 +1,6 @@
 FROM golang:bookworm AS builder
 WORKDIR /server
-COPY ./go.mod ./backend/go.sum ./
+COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ .
 RUN go build -o server .
