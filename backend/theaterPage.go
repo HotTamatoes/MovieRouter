@@ -1,27 +1,27 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 )
 
 type Theater struct {
-	Name        string      `json:"name"`
-	Address     string      `json:"vicinity"`
+	Name        Name        `json:"displayName"`
+	Address     string      `json:"formattedAddress"`
 	Rating      json.Number `json:"rating"`
-	RatingCount json.Number `json:"user_ratings_total"`
-	Geometry    Geometry    `json:"geometry"`
+	RatingCount json.Number `json:"userRatingCount"`
+	Location    Location    `json:"location"`
 }
-
-type Geometry struct {
-	Location Location `json:"location"`
+type Name struct {
+	Text         string `json:"text"`
+	LanguageCode string `json:"languageCode"`
 }
 type Location struct {
-	Lat json.Number `json:"lat"`
-	Lng json.Number `json:"lng"`
+	Lat json.Number `json:"latitude"`
+	Lng json.Number `json:"longitude"`
 }
 
 func getTheaterList(w http.ResponseWriter, r *http.Request) {
@@ -29,39 +29,52 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Cache-Control", "max-age=3600")
 	var theaters struct {
-		Results []Theater `json:"results"`
+		Results []Theater `json:"places"`
 	}
 	fmt.Println("Starting movie info search with location: " + r.URL.Query().Get("location"))
 
-	location := r.URL.Query().Get("location")
-	if location == "" {
-		http.Error(w, "Location not provided", http.StatusBadRequest)
+	lat := r.URL.Query().Get("lat")
+	if lat == "" {
+		http.Error(w, "Latitude not provided", http.StatusBadRequest)
+		return
+	}
+	lng := r.URL.Query().Get("lng")
+	if lng == "" {
+		http.Error(w, "Longitude not provided", http.StatusBadRequest)
 		return
 	}
 
-	var url []string = []string{
-		"https://maps.googleapis.com/maps/api/place/nearbysearch/json",
-		"?key=" + secrets.Keys.Google,
-		"&location=" + location,
-		"&radius=25000",
-		"&type=movie_theater"}
+	postUrl := "https://places.googleapis.com/v1/places:searchNearby"
+	payload := map[string]interface{}{
+		"includedPrimaryTypes": []string{"movie_theater"},
+		"maxResultCount":       10,
+		"locationRestriction": map[string]interface{}{
+			"circle": map[string]interface{}{
+				"center": map[string]string{
+					"latitude":  lat,
+					"longitude": lng,
+				},
+				"radius": 50000,
+			},
+		},
+	}
+	post, _ := json.Marshal(payload)
 
-	searchURL := strings.Join(url, "")
-
-	fmt.Println("searchURL: ", searchURL)
-
-	req, err := http.NewRequest("GET", searchURL, nil)
+	req, err := http.NewRequest("POST", postUrl, bytes.NewBuffer(post))
 	if err != nil {
 		panic(err)
 	}
+	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept-Charset", "utf-8")
+	req.Header.Add("X-Goog-Api-Key", secrets.Keys.Google)
+	req.Header.Add("X-Goog-FieldMask", "places.displayName,places.location,places.formattedAddress,places.rating,places.userRatingCount")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Web has been requested for nearby" + location)
+	fmt.Println("Web has been requested for nearby " + lat + "," + lng)
 
 	err2 := json.NewDecoder(resp.Body).Decode(&theaters)
 	if err2 != nil {

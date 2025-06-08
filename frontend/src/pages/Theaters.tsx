@@ -102,17 +102,17 @@ export default function Theaters() {
     }
     useEffect(() => {
         const getData = async () => {
-            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/theaterlist?location=${userLocation.lat},${userLocation.lng}`)
+            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/theaterlist?lat=${userLocation.lat}&lng=${userLocation.lng}`)
             const resJson = await res.json()
             let out: Theater[] = []
             for (const theater of resJson.results) {
                 out.push({
-                    name: theater.name,
-                    address: theater.vicinity,
+                    name: theater.displayName,
+                    address: theater.formattedAddress,
                     rating: '' + theater.rating,
-                    rating_count: '' + theater.user_ratings_total,
-                    lat: '' + theater.geometry.location.lat,
-                    lng: '' + theater.geometry.location.lng
+                    rating_count: '' + theater.userRatingCount,
+                    lat: '' + theater.location.latitude,
+                    lng: '' + theater.location.longitude
                 })
             }
             setTheaters(out)
