@@ -1,8 +1,8 @@
-FROM golang:bookworm
+FROM golang:bookworm AS builder
 WORKDIR /server
-COPY ./backend/go.mod ./backend/go.sum ./
+COPY ./go.mod ./backend/go.sum ./
 RUN go mod download
-COPY ./backend/ .
+COPY ./ .
 RUN go build -o server .
 FROM debian:bookworm-slim
 WORKDIR /server
