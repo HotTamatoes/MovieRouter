@@ -107,7 +107,7 @@ export default function Theaters() {
             let out: Theater[] = []
             for (const theater of resJson.places) {
                 out.push({
-                    name: theater.displayName,
+                    name: theater.displayName.text,
                     address: theater.formattedAddress,
                     rating: '' + theater.rating,
                     rating_count: '' + theater.userRatingCount,
