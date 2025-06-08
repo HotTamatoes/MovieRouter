@@ -1,5 +1,7 @@
 services:
   server:
+    env_file:
+      - ./backend/.env
     build: .
     container_name: go-server
     ports:
@@ -11,6 +13,8 @@ services:
     restart: always
 
   postgres:
+    env_file:
+      - ./backend/.env
     image: postgres
     environment:
       - POSTGRES_USER=goserveruser
