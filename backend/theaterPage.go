@@ -48,6 +48,7 @@ func getTheaterList(w http.ResponseWriter, r *http.Request) {
 	payload := map[string]interface{}{
 		"includedPrimaryTypes": []string{"movie_theater"},
 		"maxResultCount":       10,
+		"rankPreference":       "DISTANCE",
 		"locationRestriction": map[string]interface{}{
 			"circle": map[string]interface{}{
 				"center": map[string]string{
