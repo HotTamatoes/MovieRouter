@@ -2,7 +2,7 @@ FROM golang:bookworm AS builder
 WORKDIR /server
 COPY ./go.mod ./go.sum ./
 RUN go mod download
-COPY ./ .
+COPY . .
 RUN go build -o server .
 FROM debian:bookworm-slim
 WORKDIR /server
