@@ -41,11 +41,11 @@ func main() {
 	defer disconnectSQL()
 
 	router := mux.NewRouter()
-	router.HandleFunc("/api/theaterlist", getTheaterList).Methods("GET")
-	router.HandleFunc("/api/movieinfo", getMovieInfo).Methods("GET")
-	router.HandleFunc("/api/test", test).Methods("GET")
-	router.HandleFunc("/api/testjson", testJson).Methods("GET")
-	router.HandleFunc("/api/omdb", omdbHandler).Methods("GET")
+	router.HandleFunc("/theaterlist", getTheaterList).Methods("GET")
+	router.HandleFunc("/movieinfo", getMovieInfo).Methods("GET")
+	router.HandleFunc("/test", test).Methods("GET")
+	router.HandleFunc("/testjson", testJson).Methods("GET")
+	router.HandleFunc("/omdb", omdbHandler).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":"+secrets.Port, router))
 }
