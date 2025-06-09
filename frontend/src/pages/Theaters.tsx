@@ -102,7 +102,7 @@ export default function Theaters() {
     }
     useEffect(() => {
         const getData = async () => {
-            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/api/theaterlist?lat=${userLocation.lat}&lng=${userLocation.lng}`)
+            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/theaterlist?lat=${userLocation.lat}&lng=${userLocation.lng}`)
             const resJson = await res.json()
             let out: Theater[] = []
             for (const theater of resJson.places) {

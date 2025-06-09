@@ -17,7 +17,7 @@ export const fetcher = (url: string) =>
 export default function Home() {
     const listRef = useRef<HTMLUListElement | null>(null)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
-    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/api/omdb`, fetcher)
+    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/omdb`, fetcher)
 
     function movieBoxisActive(index: number) {
         setActiveIndex(index)

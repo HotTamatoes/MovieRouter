@@ -20,9 +20,9 @@ export default function Search() {
     let url: string | null = null
     if(query && query.length > 5 && query.length <= 10 &&
         query.substring(0,2) == 'tt' && !Number.isNaN(Number(query.substring(2)))){
-        url = `${import.meta.env.VITE_GOSERVER}/api/omdb?id=${query}`
+        url = `${import.meta.env.VITE_GOSERVER}/omdb?id=${query}`
     } else if (query) {
-        url = `${import.meta.env.VITE_GOSERVER}/api/omdb?title=${query}`
+        url = `${import.meta.env.VITE_GOSERVER}/omdb?title=${query}`
     }
     const { data, error, isLoading } = useSWR<Movie>(
         url,

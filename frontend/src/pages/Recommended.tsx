@@ -10,7 +10,7 @@ import useSWR from 'swr'
 
 export default function Recommended() {
     const [index, setIndex] = useState(0)
-    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/api/omdb`, fetcher)
+    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/omdb`, fetcher)
 
     function goLeft() {
         if(index > 0) {

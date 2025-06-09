@@ -32,7 +32,7 @@ export default function Genres() {
     const [activeIndexGenrePair, setActiveIndexGenrePair] = useState<{idx: number, gnr: string} | null>(null)
     const [navbarShow, setNavbarShow] = useState(false)
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/api/omdb`, fetcher)
+    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/omdb`, fetcher)
 
     useEffect(() => {
         const handleResize = () => setIsSmallScreen(window.innerWidth < 768)
