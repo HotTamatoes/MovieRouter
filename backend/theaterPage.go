@@ -14,14 +14,18 @@ type Theater struct {
 	Rating      json.Number `json:"rating"`
 	RatingCount json.Number `json:"userRatingCount"`
 	Location    Location    `json:"location"`
+	Postal      Postal      `json:"postalAddress"`
 }
 type Name struct {
-	Text         string `json:"text"`
-	LanguageCode string `json:"languageCode"`
+	Text string `json:"text"`
 }
 type Location struct {
 	Lat json.Number `json:"latitude"`
 	Lng json.Number `json:"longitude"`
+}
+
+type Postal struct {
+	Code string `json:"postalCode"`
 }
 
 func getTheaterList(w http.ResponseWriter, r *http.Request) {

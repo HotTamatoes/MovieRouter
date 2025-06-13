@@ -1,5 +1,5 @@
 import './Theaters.css'
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import LoadingSpinner from "../components/LoadingSpinner"
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -27,10 +27,87 @@ export default function Theaters() {
     })
     const [clickedTheater, setClickedTheater] = useState<string | null>(null)
     const [expanded, setExpanded] = useState(window.innerWidth > 768)
+    const [dragOffset, setDragOffset] = useState(0)
+    const freshExpanded = useRef(expanded)
+    const freshOffset = useRef(dragOffset)
+    const startX = useRef<number | null>(null)
+    const isDragging = useRef(false)
+    const listingRef = useRef<HTMLDivElement | null>(null)
+    const didFlip = useRef(false)
+
+    useEffect(() => {
+        freshExpanded.current = expanded
+    }, [expanded])
+
+    useEffect(() => {
+        freshOffset.current = dragOffset
+    }, [dragOffset])
 
     function toggleExpanded(){
         setExpanded(!expanded)
     }
+
+    useEffect(() => {
+        window.addEventListener('mousemove', onDragMove)
+        window.addEventListener('mouseup', onDragEnd)
+        window.addEventListener('touchmove', onDragMove)
+        window.addEventListener('touchend', onDragEnd)
+    }, [])
+    
+    const getClientX = (e: MouseEvent | TouchEvent) => {
+        if ('touches' in e) {
+            return e.touches[0].clientX
+        }
+        return e.clientX
+    }
+
+    function onDragStart(e: React.MouseEvent | React.TouchEvent) {
+        startX.current = getClientX(e.nativeEvent)
+        isDragging.current = true
+        setDragOffset(0)
+    }
+    function onDragMove(e: MouseEvent | TouchEvent) {
+        if (!isDragging.current || startX.current === null) return
+        const x = getClientX(e)
+        setDragOffset(x - startX.current)
+    }
+    function onDragEnd() {
+        if(!isDragging.current) return
+        const panelWidth = listingRef.current?.offsetWidth
+        const offset = freshOffset.current
+        const exp = freshExpanded.current
+        if (!panelWidth) return
+        if (exp && offset > panelWidth / 4){
+            setExpanded(false)
+            freshExpanded.current = false
+            didFlip.current = true
+        } else if (!exp && offset < -panelWidth / 4){
+            setExpanded(true)
+            freshExpanded.current = true
+            didFlip.current = true
+        }
+        isDragging.current = false
+        startX.current = null
+        if (didFlip.current) {
+            const flippedOffset = freshExpanded.current ? -panelWidth+freshOffset.current : panelWidth-freshOffset.current
+            setDragOffset(flippedOffset)
+            freshOffset.current = flippedOffset
+        } else {
+            setDragOffset(0)
+            freshOffset.current = 0
+        }
+    }
+    useEffect(() => {
+        if (didFlip.current) {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setDragOffset(0)
+                    freshOffset.current = 0
+                    didFlip.current = false
+                })
+            })
+        }
+    }, [expanded])
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -185,7 +262,21 @@ export default function Theaters() {
             <div className={expanded ? "googleMap" : "googleMap mapExpanded"} id='map'>
             {!loaded && <p>Loading map</p>}
             </div>
-            <div className={expanded ? "listing listingExpanded" : "listing"}>
+            <div
+                className={expanded ? "listing listingExpanded" : "listing"}
+                ref={listingRef}
+                onMouseDown = {onDragStart}
+                onTouchStart = {onDragStart}
+                style={
+                    !isDragging.current? undefined : expanded? {
+                        transform : `translateX(min(max(0px, ${dragOffset}px), calc(${listingRef.current?.offsetWidth}px - 2.5em)))`,
+                        transition: 'none'
+                    } : {
+                        transform: `translateX(calc(${listingRef.current?.offsetWidth}px - 2.5em + max(min(0px, ${dragOffset}px), calc(-${listingRef.current?.offsetWidth}px + 2.5em))))`,
+                        transition: 'none'
+                    }
+                }
+            >
                 {userLocation.lat != 100 &&
                     <div>
                         <div className="theaterDropdown">
