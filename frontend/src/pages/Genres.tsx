@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react"
 import LoadingSpinner from "../components/LoadingSpinner"
 import './Genres.css'
-import MovieCard, { Movie } from '../components/MovieCard'
+import MovieCard from '../components/MovieCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { fetcher } from './Home'
+import { fetcher, Result } from './Home'
 import useSWR from 'swr'
 
 function addUniqueSections(input: string, existingGenres: string[]): string[] {
@@ -32,7 +32,33 @@ export default function Genres() {
     const [activeIndexGenrePair, setActiveIndexGenrePair] = useState<{idx: number, gnr: string} | null>(null)
     const [navbarShow, setNavbarShow] = useState(false)
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/omdb`, fetcher)
+    const [userLocation, setUserLocation] = useState({
+        lat: 100,
+        lng: 200,
+        error: ""
+    })
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((loc) => {
+            const {latitude, longitude} = loc.coords;
+            setUserLocation({
+            lat: latitude,
+            lng: longitude,
+            error: ""
+            })
+        }), () => {
+            setUserLocation({
+            lat: 100,
+            lng: 200,
+            error: "Unable to retrieve your location"
+            })
+        }
+    }, [])
+    
+    const { data, error, isLoading } = useSWR<Result>(() => {
+        if(userLocation.lat == 100) return null
+        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.lat}&lng=${userLocation.lng}`
+    }, fetcher)
 
     useEffect(() => {
         const handleResize = () => setIsSmallScreen(window.innerWidth < 768)
@@ -43,7 +69,7 @@ export default function Genres() {
     useEffect(() => {
         if (!data) return
         let out: string[] = []
-        data.forEach((movie) => {
+        data.Movies.forEach((movie) => {
             addUniqueSections(movie.Genre, out)
         })
         setGenres(out)
@@ -89,7 +115,7 @@ export default function Genres() {
 
     if(error) return (<div>Error loading movies: {error.message}</div>)
     if(isLoading) return (<LoadingSpinner />)
-    if(!data || data.length === 0) return (<div>No Movies Found</div>)
+    if(!data || data.Movies.length === 0) return (<div>No Movies Found</div>)
 
     return (
         <>
@@ -110,7 +136,7 @@ export default function Genres() {
             </div>
         }
         {genres.map((genre) => {
-            const genreMovies = data.filter((movie) =>
+            const genreMovies = data.Movies.filter((movie) =>
                 movie.Genre.split(',').map(s => s.trim()).includes(genre)
             )
 

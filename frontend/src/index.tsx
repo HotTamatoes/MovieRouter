@@ -23,11 +23,11 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Navbar />}>
         <Route index element={<Home />} />
-        <Route path="Genres" element={<Genres />} />
-        <Route path="Recommended" element={<Recommended />} />
-        <Route path="Theaters" element={<Theaters />} />
-        <Route path="Search" element={<Search />} />
-        <Route path="About" element={<About />} />
+        <Route path="genres" element={<Genres />} />
+        <Route path="recommended" element={<Recommended />} />
+        <Route path="theaters" element={<Theaters />} />
+        <Route path="search" element={<Search />} />
+        <Route path="about" element={<About />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>
     </>

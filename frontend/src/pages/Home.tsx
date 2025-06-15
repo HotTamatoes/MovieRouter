@@ -6,6 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX } from '@fortawesome/free-solid-svg-icons'
 import useSWR from 'swr'
     
+
+export interface Result {
+    Movies:     Movie[]
+    Theaters:   Theater[]
+    Links:      TheaterMovie[]
+}
+export interface Theater {
+    Name: string
+}
+export interface TheaterMovie {
+    Theater:        string
+    Theater_movies: string[]
+}
 export const fetcher = (url: string) =>
     fetch(url).then((res) => {
     if (!res.ok) {
@@ -17,7 +30,33 @@ export const fetcher = (url: string) =>
 export default function Home() {
     const listRef = useRef<HTMLUListElement | null>(null)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
-    const { data, error, isLoading } = useSWR<Movie[]>(`${import.meta.env.VITE_GOSERVER}/omdb`, fetcher)
+    const [userLocation, setUserLocation] = useState({
+        lat: 100,
+        lng: 200,
+        error: ""
+    })
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((loc) => {
+            const {latitude, longitude} = loc.coords;
+            setUserLocation({
+            lat: latitude,
+            lng: longitude,
+            error: ""
+            })
+        }), () => {
+            setUserLocation({
+            lat: 100,
+            lng: 200,
+            error: "Unable to retrieve your location"
+            })
+        }
+    }, [])
+
+    const { data, error, isLoading } = useSWR<Result>(() => {
+        if(userLocation.lat == 100) return null
+        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.lat}&lng=${userLocation.lng}`
+    }, fetcher)
 
     function movieBoxisActive(index: number) {
         setActiveIndex(index)
@@ -41,7 +80,7 @@ export default function Home() {
 
     if(error) return (<div>Error loading movies: {error.message}</div>)
     if(isLoading) return (<LoadingSpinner />)
-    if(!data || data.length === 0) return (<div>No Movies Found</div>)
+    if(!data || data.Movies.length === 0) return (<div>No Movies Found</div>)
     
     return (
     <>
@@ -50,7 +89,7 @@ export default function Home() {
         This Website is Under Construction, Estimated to be Complete In July 2025
     </div>
     <ul className="movieList" ref={listRef}>
-        {data.map((movie: Movie, index: number) => (
+        {data.Movies.map((movie: Movie, index: number) => (
         <li key={index}
             onClick={() => {if (activeIndex !== index){movieBoxisActive(index)}}}
             className={activeIndex === index ? 'selected' : ''}>

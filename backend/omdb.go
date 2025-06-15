@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 type Movie struct {
@@ -19,17 +20,6 @@ type Movie struct {
 	ImdbID   string `json:"ImdbID"`
 }
 
-func omdbDefault(w http.ResponseWriter) {
-	movieList := [12]string{"tt11655566", "tt9603208", "tt1674782", "tt32246771", "tt9619824",
-		"tt26743210", "tt30840798", "tt30253514", "tt31193180", "tt20969586", "tt32299316", "tt8115900"}
-
-	var movies [len(movieList)]Movie
-	for index, movieIMDB := range movieList {
-		movies[index] = getOmdbSingle("", movieIMDB)
-	}
-	json.NewEncoder(w).Encode(movies)
-}
-
 func omdbHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -41,13 +31,12 @@ func omdbHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Both Movie Title and ID were Provided", http.StatusBadRequest)
 		return
 	} else if movieTitle == "" && movieIMDB == "" {
-		omdbDefault(w)
-		return
+		http.Error(w, "Neither Title and IMDB ID were provided", http.StatusBadRequest)
 	} else if movieTitle != "" || movieIMDB[:2] == "tt" {
 		json.NewEncoder(w).Encode(getOmdbSingle(movieTitle, movieIMDB))
 		return
 	}
-	http.Error(w, "Title was not provided and IMDB ID is not valid", http.StatusBadRequest)
+	http.Error(w, "Valid Title and IMDB ID were both not provided", http.StatusBadRequest)
 }
 
 func getOmdbSingle(movieTitle string, movieIMDB string) Movie {
@@ -69,7 +58,13 @@ func getOmdbSingle(movieTitle string, movieIMDB string) Movie {
 			panic(err)
 		}
 	} else {
-		req, err = http.NewRequest("GET", "http://www.omdbapi.com/?apikey="+secrets.Keys.Omdb+"&plot=full&t="+movieTitle, nil)
+		baseURL := "http://www.omdbapi.com/"
+		params := url.Values{}
+		params.Add("apikey", secrets.Keys.Omdb)
+		params.Add("plot", "full")
+		params.Add("t", movieTitle)
+		fullURL := baseURL + "?" + params.Encode()
+		req, err = http.NewRequest("GET", fullURL, nil)
 		if err != nil {
 			panic(err)
 		}
@@ -82,6 +77,39 @@ func getOmdbSingle(movieTitle string, movieIMDB string) Movie {
 	fmt.Println("Web has been requested for Movie titled: " + movieTitle + " / With ID: " + movieIMDB)
 
 	json.NewDecoder(resp.Body).Decode(&movie)
-	putMovieSQL(movie)
+	if movie.Poster != "" {
+		putMovieSQL(movie)
+	}
+	return movie
+}
+
+func getOmdbSingleYear(title string, year string) Movie {
+	movie := getMovieSQLTitleYear(title, year)
+	if movie.Poster != "" {
+		return movie
+	}
+
+	baseURL := "http://www.omdbapi.com/"
+	params := url.Values{}
+	params.Add("apikey", secrets.Keys.Omdb)
+	params.Add("plot", "full")
+	params.Add("t", title)
+	params.Add("y", year)
+	fullURL := baseURL + "?" + params.Encode()
+	req, err := http.NewRequest("GET", fullURL, nil)
+	if err != nil {
+		panic(err)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("Web has been requested for Movie titled: " + title + " with year: " + year)
+
+	json.NewDecoder(resp.Body).Decode(&movie)
+	if movie.Poster != "" {
+		putMovieSQL(movie)
+	}
 	return movie
 }

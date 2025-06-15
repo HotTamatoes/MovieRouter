@@ -1,5 +1,6 @@
 .spinner {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -7,6 +8,10 @@
     width: 20vh;
     height: 20vh;
     animation: spin 1s linear infinite;
+    margin: 3em;
+}
+.loadText {
+    font-size: 1.5em;
 }
 
 @keyframes spin {

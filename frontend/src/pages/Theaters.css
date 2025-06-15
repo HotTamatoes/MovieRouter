@@ -69,11 +69,7 @@
     background-color: var(--lightest-color);
 }
 
-.box:hover {
-    background-color: var(--hover-color);
-}
-
-.theaterDropdown {
+.theaterSearch {
     display: flex;
     flex-direction: row;
     place-content: center;
@@ -81,17 +77,11 @@
     width: 100%;
 }
 
-.theaterDropdown select {
+.theaterSearch select {
     margin: auto;
     padding-top: 0.3em;
     padding-bottom: 0.3em;
     margin-left: 0;
-}
-
-.rText{
-    margin: auto;
-    margin-right: 0;
-    display: none;
 }
 
 .chevron {
@@ -99,6 +89,7 @@
     float: left;
     padding-left: 0.2em;
     font-size: 3em;
+    margin-right: auto;
 }
 
 @media (min-width: 768px) {
@@ -126,5 +117,7 @@
     .listingExpanded {
         transform: translateX(0);
     }
-
+    .box:hover {
+        background-color: var(--hover-color);
+    }
 }

@@ -6,6 +6,7 @@ export default function LoadingSpinner() {
     <>
         <div className="spinner">
             <img src={reel} className='spinner-img' />
+            <div className="loadText">This website uses your location to load</div>
         </div>
     </>
     )
