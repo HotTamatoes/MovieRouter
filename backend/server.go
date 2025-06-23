@@ -43,6 +43,8 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/theaterlist", getTheaterList).Methods("GET")
 	router.HandleFunc("/movieinfo", getMovieInfo).Methods("GET")
+	router.HandleFunc("/postalCode", getPostalWrap).Methods("GET")
+	router.HandleFunc("/latlng", getLatLngWrap).Methods("GET")
 	router.HandleFunc("/test", test).Methods("GET")
 	router.HandleFunc("/testjson", testJson).Methods("GET")
 	router.HandleFunc("/omdb", omdbHandler).Methods("GET")

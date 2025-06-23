@@ -91,7 +91,6 @@ func getMovieInfoHelper(postalCode string) Result {
 				if len(titleStr) < 6 {
 					titleStr = strings.TrimSpace(movieSel.Find("div.showtimes-movie-data h3.showtimes-movie-data-title").Text())
 				}
-				fmt.Printf("title: %s, ", titleStr)
 				if len(titleStr) >= 6 && titleStr[len(titleStr)-1:] == ")" {
 					title := strings.TrimSpace(titleStr[:len(titleStr)-6])
 					year := titleStr[len(titleStr)-5 : len(titleStr)-1]
