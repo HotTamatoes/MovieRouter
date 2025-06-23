@@ -1,41 +1,45 @@
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import { fetcher, Result } from './Home'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+
+import './Recommended.css'
 import LoadingSpinner from '../components/LoadingSpinner'
 import MovieCard from '../components/MovieCard';
-import './Recommended.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import { fetcher, Result } from './Home'
-import useSWR from 'swr'
+import { useLocation, Location } from '../components/LocationContext'
 
 export default function Recommended() {
     const [index, setIndex] = useState(0)
-    const [userLocation, setUserLocation] = useState({
-        lat: 100,
-        lng: 200,
-        error: ""
-    })
+    const { userLocation, setUserLocation } = useLocation()
+    const { postalCode } = useParams<{ postalCode: string }>()
 
+    
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((loc) => {
-            const {latitude, longitude} = loc.coords;
-            setUserLocation({
-            lat: latitude,
-            lng: longitude,
-            error: ""
-            })
-        }), () => {
-            setUserLocation({
-            lat: 100,
-            lng: 200,
-            error: "Unable to retrieve your location"
-            })
+        if (!postalCode || !userLocation) {
+            return
         }
-    }, [])
+        if (postalCode != userLocation.PostalCode) {
+            fetch(`${import.meta.env.VITE_GOSERVER}/latlng?postalCode=${postalCode}}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to fetch location");
+                    return res.json();
+                })
+                .then((loc: Location) => {
+                    setUserLocation({
+                        PostalCode: postalCode,
+                        Lat: loc ? loc.Lat: 100,
+                        Lng: loc ? loc.Lng: 200,
+                    })
+                })
+        }
+    }, [postalCode, userLocation])
     
     const { data, error, isLoading } = useSWR<Result>(() => {
-        if(userLocation.lat == 100) return null
-        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.lat}&lng=${userLocation.lng}`
+        if(userLocation.Lat == 100) return null
+        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.Lat}&lng=${userLocation.Lng}`
     }, fetcher)
 
     function goLeft() {

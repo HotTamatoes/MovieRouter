@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import './Searchbar.css';
@@ -11,11 +11,13 @@ type SearchbarProps = {
 export default function Searchbar({ showSearch }: SearchbarProps) {
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
+    const { postalCode } = useParams<{ postalCode: string }>()
+
     function queryHandler(){
         if (query.trim() == '') {
-            navigate('/')
+            navigate(postalCode? `/${postalCode}` : "/")
         } else {
-            navigate(`/Search?${new URLSearchParams({ q: query.trim() }).toString()}`)
+            navigate((postalCode? `/${postalCode}` : "") + `/Search?${new URLSearchParams({ q: query.trim() }).toString()}`)
         }
     }
     function changeHandler(e: React.ChangeEvent<HTMLInputElement>){setQuery(e.target.value)}

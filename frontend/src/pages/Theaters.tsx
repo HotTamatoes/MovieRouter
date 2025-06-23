@@ -1,8 +1,12 @@
-import './Theaters.css'
 import { useEffect, useRef, useState } from "react"
-import LoadingSpinner from "../components/LoadingSpinner"
+import { useParams } from 'react-router-dom'
+
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import './Theaters.css'
+import LoadingSpinner from "../components/LoadingSpinner"
+import { useLocation, Location } from '../components/LocationContext'
 interface Theater {
     name: string
     address: string
@@ -19,11 +23,6 @@ let lastMarker: google.maps.marker.AdvancedMarkerElement | null
 export default function Theaters() {
     const [theaters, setTheaters] = useState<Theater[]>([])
     const [loaded, setLoaded] = useState(false)
-    const [userLocation, setUserLocation] = useState({
-        lat: 100,
-        lng: 200,
-        error: ""
-    })
     const [clickedTheater, setClickedTheater] = useState<string | null>(null)
     const [expanded, setExpanded] = useState(window.innerWidth > 768)
     const [dragOffset, setDragOffset] = useState(0)
@@ -33,6 +32,29 @@ export default function Theaters() {
     const isDragging = useRef(false)
     const listingRef = useRef<HTMLDivElement | null>(null)
     const didFlip = useRef(false)
+    const { userLocation, setUserLocation } = useLocation()
+    const { postalCode } = useParams<{ postalCode: string }>()
+    
+        
+    useEffect(() => {
+        if (!postalCode || !userLocation) {
+            return
+        }
+        if (postalCode != userLocation.PostalCode) {
+            fetch(`${import.meta.env.VITE_GOSERVER}/latlng?postalCode=${postalCode}}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to fetch location");
+                    return res.json();
+                })
+                .then((loc: Location) => {
+                    setUserLocation({
+                        PostalCode: postalCode,
+                        Lat: loc ? loc.Lat: 100,
+                        Lng: loc ? loc.Lng: 200,
+                    })
+                })
+        }
+    }, [postalCode, userLocation])
 
     useEffect(() => {
         freshExpanded.current = expanded
@@ -115,23 +137,6 @@ export default function Theaters() {
         script.onload = () => setLoaded(true)
         document.head.appendChild(script)
     }, []);
-
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition((loc) => {
-            const {latitude, longitude} = loc.coords;
-            setUserLocation({
-            lat: latitude,
-            lng: longitude,
-            error: ""
-            })
-        }), () => {
-            setUserLocation({
-            lat: 100,
-            lng: 200,
-            error: "Unable to retrieve your location"
-            })
-        }
-    }, [])
     
     function theaterClick(name: string, fromMap: boolean) {
         markers.forEach((marker) => {
@@ -164,7 +169,7 @@ export default function Theaters() {
     }
     useEffect(() => {
         const getData = async () => {
-            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/theaterlist?lat=${userLocation.lat}&lng=${userLocation.lng}`)
+            const res = await fetch(`${import.meta.env.VITE_GOSERVER}/theaterlist?lat=${userLocation.Lat}&lng=${userLocation.Lng}`)
             const resJson = await res.json()
             let out: Theater[] = []
             for (const theater of resJson.places) {
@@ -179,20 +184,20 @@ export default function Theaters() {
             }
             setTheaters(out)
         }
-        if(userLocation.lat != 100){
+        if(userLocation.Lat != 100){
             getData()
         }
     }, [userLocation])
 
     useEffect(() => {
         if (!loaded) return
-        if (userLocation.lat == 100) return
+        if (userLocation.Lat == 100) return
         const element = document.getElementById('map')
         if (element == null) return
         if (theaters.length == 0) return
 
         map = new google.maps.Map(element, {
-            center: { lat: userLocation.lat, lng: userLocation.lng },
+            center: { lat: userLocation.Lat, lng: userLocation.Lng },
             zoom: 11,
             mapId: 'map'
         });
@@ -205,7 +210,7 @@ export default function Theaters() {
         })
         markers.push(new google.maps.marker.AdvancedMarkerElement({
             map,
-            position: { lat: userLocation.lat, lng: userLocation.lng },
+            position: { lat: userLocation.Lat, lng: userLocation.Lng },
             title: "You are here",
             content: herePin.element
         }));
@@ -223,13 +228,13 @@ export default function Theaters() {
         })
     }, [loaded, userLocation, theaters])
 
-    if(theaters.length == 0 && userLocation.error == "") {
+    if(theaters.length == 0 && userLocation.Error == "") {
         return (<>
             <LoadingSpinner />
         </>)
     }
-    if(userLocation.error != ""){
-        return (<p>Error: {userLocation.error}</p>)
+    if(userLocation.Error){
+        return (<p>Error: {userLocation.Error}</p>)
     }
 
     return (
@@ -253,7 +258,7 @@ export default function Theaters() {
                     }
                 }
             >
-                {userLocation.lat != 100 &&
+                {userLocation.Lat != 100 &&
                     <div>
                         <div className="theaterSearch">
                             <div className="chevron" onClick={toggleExpanded}>
@@ -274,7 +279,7 @@ export default function Theaters() {
                         </ul>
                     </div>
                 }
-                {userLocation.error != '' && <p>Error: {userLocation.error}</p>}
+                {userLocation.Error && <p>Error: {userLocation.Error}</p>}
             </div>
         </div>
     </>

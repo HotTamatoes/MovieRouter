@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-import './Home.css'
-import LoadingSpinner from '../components/LoadingSpinner'
-import MovieCard, { Movie } from '../components/MovieCard'
+import { useParams } from 'react-router-dom'
+import useSWR from 'swr'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX } from '@fortawesome/free-solid-svg-icons'
-import useSWR from 'swr'
-    
+
+import './Home.css'
+import MovieCard, { Movie } from '../components/MovieCard'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { useLocation, Location } from '../components/LocationContext'
+
 
 export interface Result {
     Movies:     Movie[]
@@ -19,6 +23,7 @@ export interface TheaterMovie {
     Theater:        string
     Theater_movies: string[]
 }
+
 export const fetcher = (url: string) =>
     fetch(url).then((res) => {
     if (!res.ok) {
@@ -30,32 +35,32 @@ export const fetcher = (url: string) =>
 export default function Home() {
     const listRef = useRef<HTMLUListElement | null>(null)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
-    const [userLocation, setUserLocation] = useState({
-        lat: 100,
-        lng: 200,
-        error: ""
-    })
+    const { userLocation, setUserLocation } = useLocation()
+    const { postalCode } = useParams<{ postalCode: string }>()
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((loc) => {
-            const {latitude, longitude} = loc.coords;
-            setUserLocation({
-            lat: latitude,
-            lng: longitude,
-            error: ""
-            })
-        }), () => {
-            setUserLocation({
-            lat: 100,
-            lng: 200,
-            error: "Unable to retrieve your location"
-            })
+        if (!postalCode || !userLocation) {
+            return
         }
-    }, [])
+        if (postalCode != userLocation.PostalCode) {
+            fetch(`${import.meta.env.VITE_GOSERVER}/latlng?postalCode=${postalCode}}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to fetch location");
+                    return res.json();
+                })
+                .then((loc: Location) => {
+                    setUserLocation({
+                        PostalCode: postalCode,
+                        Lat: loc ? loc.Lat: 100,
+                        Lng: loc ? loc.Lng: 200,
+                    })
+                })
+        }
+    }, [postalCode, userLocation])
 
     const { data, error, isLoading } = useSWR<Result>(() => {
-        if(userLocation.lat == 100) return null
-        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.lat}&lng=${userLocation.lng}`
+        if(userLocation.Lat == 100) return null
+        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.Lat}&lng=${userLocation.Lng}`
     }, fetcher)
 
     function movieBoxisActive(index: number) {

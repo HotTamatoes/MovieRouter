@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react"
-import LoadingSpinner from "../components/LoadingSpinner"
-import './Genres.css'
-import MovieCard from '../components/MovieCard'
+import { useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import { fetcher, Result } from './Home'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { fetcher, Result } from './Home'
-import useSWR from 'swr'
+
+import './Genres.css'
+import LoadingSpinner from "../components/LoadingSpinner"
+import MovieCard from '../components/MovieCard'
+import { useLocation, Location } from '../components/LocationContext'
 
 function addUniqueSections(input: string, existingGenres: string[]): string[] {
     const genres = input.split(',').map(s => s.trim())
@@ -31,33 +35,34 @@ export default function Genres() {
     const [genres, setGenres] = useState<string[]>([])
     const [activeIndexGenrePair, setActiveIndexGenrePair] = useState<{idx: number, gnr: string} | null>(null)
     const [navbarShow, setNavbarShow] = useState(false)
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-    const [userLocation, setUserLocation] = useState({
-        lat: 100,
-        lng: 200,
-        error: ""
-    })
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768)
+    const { userLocation, setUserLocation } = useLocation()
+    const { postalCode } = useParams<{ postalCode: string }>()
 
+    
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((loc) => {
-            const {latitude, longitude} = loc.coords;
-            setUserLocation({
-            lat: latitude,
-            lng: longitude,
-            error: ""
-            })
-        }), () => {
-            setUserLocation({
-            lat: 100,
-            lng: 200,
-            error: "Unable to retrieve your location"
-            })
+        if (!postalCode || !userLocation) {
+            return
         }
-    }, [])
+        if (postalCode != userLocation.PostalCode) {
+            fetch(`${import.meta.env.VITE_GOSERVER}/latlng?postalCode=${postalCode}}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Failed to fetch location");
+                    return res.json();
+                })
+                .then((loc: Location) => {
+                    setUserLocation({
+                        PostalCode: postalCode,
+                        Lat: loc ? loc.Lat: 100,
+                        Lng: loc ? loc.Lng: 200,
+                    })
+                })
+        }
+    }, [postalCode, userLocation])
     
     const { data, error, isLoading } = useSWR<Result>(() => {
-        if(userLocation.lat == 100) return null
-        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.lat}&lng=${userLocation.lng}`
+        if(userLocation.Lat == 100) return null
+        return `${import.meta.env.VITE_GOSERVER}/movieinfo?lat=${userLocation.Lat}&lng=${userLocation.Lng}`
     }, fetcher)
 
     useEffect(() => {
