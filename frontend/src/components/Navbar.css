@@ -94,7 +94,7 @@
 
 @media (min-width: 768px) {
     .warning {
-        display: block;
+        display: none;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
